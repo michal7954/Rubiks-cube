@@ -11,91 +11,20 @@ var server = http.createServer(function (req, res) {
 
     if (req.method == "GET") {
 
+        // mów mi "Bóg"
         if (req.url === "/") {
-            fs.readFile("static/index.html", function (error, data) {
-                res.writeHead(200, { 'Content-Type': 'text/html' });
-                res.write(data);
-                res.end();
-            })
+            req.url = "/index.html"
+            getFile(req, res, "text/html")
         }
-        else if (req.url === "/css/style.css") {
-            fs.readFile("static/css/style.css", function (error, data) {
-                res.writeHead(200, { 'Content-Type': 'text/css' });
-                res.write(data);
-                res.end();
-            })
+        else if (req.url == "/css/style.css") {
+            getFile(req, res, "text/css")
         }
-        else if (req.url === "/libs/jquery.js") {
-            fs.readFile("static/libs/jquery.js", function (error, data) {
-                res.writeHead(200, { 'Content-Type': 'application/javascript' });
-                res.write(data);
-                res.end();
-            })
-        }
-        else if (req.url === "/libs/three.js") {
-            fs.readFile("static/libs/three.js", function (error, data) {
-                res.writeHead(200, { 'Content-Type': 'application/javascript' });
-                res.write(data);
-                res.end();
-            })
-        }
-        else if (req.url === "/libs/OrbitControls.js") {
-            fs.readFile("static/libs/OrbitControls.js", function (error, data) {
-                res.writeHead(200, { 'Content-Type': 'application/javascript' });
-                res.write(data);
-                res.end();
-            })
-        }
-        else if (req.url === "/libs/socket.io.js") {
-            fs.readFile("static/libs/socket.io.js", function (error, data) {
-                res.writeHead(200, { 'Content-Type': 'application/javascript' });
-                res.write(data);
-                res.end();
-            })
-        }
-        else if (req.url === "/js/Game.js") {
-            fs.readFile("static/js/Game.js", function (error, data) {
-                res.writeHead(200, { 'Content-Type': 'application/javascript' });
-                res.write(data);
-                res.end();
-            })
-        }
-        else if (req.url === "/js/Net.js") {
-            fs.readFile("static/js/Net.js", function (error, data) {
-                res.writeHead(200, { 'Content-Type': 'application/javascript' });
-                res.write(data);
-                res.end();
-            })
-        }
-        else if (req.url === "/js/UI.js") {
-            fs.readFile("static/js/UI.js", function (error, data) {
-                res.writeHead(200, { 'Content-Type': 'application/javascript' });
-                res.write(data);
-                res.end();
-            })
-        }
-        else if (req.url === "/js/Armata.js") {
-            fs.readFile("static/js/Armata.js", function (error, data) {
-                res.writeHead(200, { 'Content-Type': 'application/javascript' });
-                res.write(data);
-                res.end();
-            })
-        }
-        else if (req.url === "/js/Kula.js") {
-            fs.readFile("static/js/Kula.js", function (error, data) {
-                res.writeHead(200, { 'Content-Type': 'application/javascript' });
-                res.write(data);
-                res.end();
-            })
-        }
-        else if (req.url === "/js/Main.js") {
-            fs.readFile("static/js/Main.js", function (error, data) {
-                res.writeHead(200, { 'Content-Type': 'application/javascript' });
-                res.write(data);
-                res.end();
-            })
+        else if (req.url != "/") {
+            getFile(req, res, "text/html")
         }
     }
+
+    //AJAX somsiedzie
     /*
     if (req.method == "POST") {
         var allData = "";
@@ -108,6 +37,14 @@ var server = http.createServer(function (req, res) {
     }
     */
 })
+
+function getFile(req, res, type) {
+    fs.readFile("static" + req.url, function (error, data) {
+        res.writeHead(200, { 'Content-Type': type });
+        res.write(data);
+        res.end();
+    })
+}
 
 server.listen(3000, function () {
     console.log("serwer startuje na porcie 3000")
