@@ -128,5 +128,9 @@ io.sockets.on("connection", function (client) {
         console.log("klient się rozłącza");
     })
 
+    client.on("bla", function () {
+        console.log("bla");
+    })
+
 })
 

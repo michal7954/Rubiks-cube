@@ -1,8 +1,8 @@
 function Net() {
 
-    var client = io();
+    this.client = io();
 
-    client.on("onconnect", function (data) {
+    this.client.on("onconnect", function (data) {
         console.log(data.clientName)
     })
 }
