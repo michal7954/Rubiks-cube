@@ -3,11 +3,7 @@ var qs = require("querystring");
 var fs = require("fs");
 var socketio = require("socket.io");
 
-var req
-var res
-
 var server = http.createServer(function (req, res) {
-
 
     if (req.method == "GET") {
 
@@ -51,7 +47,7 @@ server.listen(3000, function () {
 });
 
 
-var io = socketio.listen(server) // server -> server nodejs
+var io = socketio.listen(server)
 
 io.sockets.on("connection", function (client) {
 
@@ -70,4 +66,3 @@ io.sockets.on("connection", function (client) {
     })
 
 })
-
