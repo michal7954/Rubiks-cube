@@ -3,6 +3,8 @@
     "include": [
       "jquery",
       "three",
+      "socket",
+      "./libs/OrbitControls.js",
     ]
   }
 }
