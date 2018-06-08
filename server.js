@@ -5,6 +5,8 @@ var socketio = require("socket.io");
 
 var server = http.createServer(function (req, res) {
 
+    var files = ['/libs/socket.io.js", "/libs/jquery.js', '/libs/three.js', '/libs/OrbitControls.js', '/js/Game.js', '/js/Net.js', '/js/UI.js', '/js/Main.js'];
+
     if (req.method == "GET") {
 
         // mów mi "Bóg"
