@@ -22,13 +22,12 @@ function Game(placeWhereShow, width, height) {
     camera.position.set(600, 600, 600);
     camera.lookAt(scene.position);
 
-    var geometry = new THREE.BoxGeometry(100, 100, 100);
-
-    var material = new THREE.MeshBasicMaterial({
-        color: 0x8888ff,
-        side: THREE.DoubleSide,
-        wireframe: false,
+    var orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
+    orbitControl.addEventListener('change', function () {
+        renderer.render(scene, camera)
     });
+
+    var geometry = new THREE.BoxGeometry(100, 100, 100);
 
     var material2 = new THREE.MeshBasicMaterial({
         color: 0x000000,
@@ -41,6 +40,15 @@ function Game(placeWhereShow, width, height) {
             for (k = -1; k < 2; k++) {
 
                 var block = new THREE.Object3D;
+
+                var material = new THREE.MeshBasicMaterial({
+                    color: 0xff0,
+                    side: THREE.DoubleSide,
+                    wireframe: false,
+                });
+                material.color.r = Math.random(0, 255)
+                material.color.g = Math.random(0, 255)
+                material.color.b = Math.random(0, 255)
 
                 var cube = new THREE.Mesh(geometry, material);
                 block.add(cube);
@@ -56,33 +64,80 @@ function Game(placeWhereShow, width, height) {
         }
     }
 
-    var container = new THREE.Object3D;
+    //console.log(scene.children[0].uuid)
 
-    for (i = 0; i < scene.children.length; i++) {
-        if (scene.children[i].userData.x == -1) {
-            container.add(scene.children[i]);
+    var container = new THREE.Object3D;
+    var frame_num = 0;
+    var dir = 1;
+    var axis = "x"
+    var num = 1;
+
+    var game = this
+
+    this.move = function (f_dir, f_axis, f_num) {
+
+        frame_num = 180
+        dir = f_dir
+        axis = f_axis
+        num = f_num
+
+
+        for (i = 0; i < container.children.length; i++) {
+            scene.add(container.children[i]);
             i--;
         }
+        container = new THREE.Object3D;
+
+        for (i = 0; i < scene.children.length; i++) {
+            if (scene.children[i].userData[axis] == num) {
+                container.add(scene.children[i]);
+                i--;
+            }
+        }
+
+        scene.add(container)
     }
 
-    scene.add(container)
+    function frame() {
+        if (frame_num > 0) {
+
+            if (dir) {
+                rotation = Math.PI / 360
+            }
+            else {
+                rotation = -Math.PI / 360
+            }
+
+            container.rotateX(rotation)
+        }
+        else {
+            //game.move(0, "x", 1)
+        }
+        frame_num--
+    }
+
+
 
     angle = Math.PI / 4;
 
     function render() {
 
-        camera.position.x = 600 * Math.cos(angle);
-        camera.position.y = 600 * Math.sin(angle);
-        camera.position.z = 600 * Math.sin(angle);
-
-        camera.lookAt(scene.position)
-        angle = angle + 0.001;
-
-        container.rotateX(Math.PI / 360)
+        frame()
 
         renderer.render(scene, camera);
         requestAnimationFrame(render);
     };
 
     render();
+
+
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '0x';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
 }
+

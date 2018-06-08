@@ -52,11 +52,11 @@ io.sockets.on("connection", function (client) {
     })
 
     client.on("disconnect", function () {
-        console.log("klient się rozłącza");
+        console.log("CLIENT DISCONNECT");
     })
 
     client.on("bla", function () {
-        console.log("bla");
+        console.log("MESSAGE FORM CLIENT");
     })
 
 })
