@@ -5,7 +5,7 @@ var socketio = require("socket.io");
 
 var server = http.createServer(function (req, res) {
 
-    var files = ['/libs/socket.io.js", "/libs/jquery.js', '/libs/three.js', '/libs/OrbitControls.js', '/js/Game.js', '/js/Net.js', '/js/UI.js', '/js/Main.js'];
+    var filesThatServerRequire = ['/libs/socket.io.js', '/libs/jquery.js', '/libs/three.js', '/libs/OrbitControls.js', '/js/Game.js', '/js/Net.js', '/js/UI.js', '/js/Main.js'];
 
     if (req.method == "GET") {
 
@@ -17,11 +17,13 @@ var server = http.createServer(function (req, res) {
         else if (req.url == "/css/style.css") {
             getFile(req, res, "text/css")
         }
-        /*else if (req.url != "/") {
+        else if (req.url != "/") {
             for (var i = 0; i < filesThatServerRequire.length; i++) {
-                getFile(req, res, filesThatServerRequire[i]);
+                if (req.url == filesThatServerRequire[i]) {
+                    getFile(req, res, filesThatServerRequire[i]);
+                }
             }
-        }*/
+        }
     }
 
     //AJAX somsiedzie
@@ -39,7 +41,6 @@ var server = http.createServer(function (req, res) {
 })
 
 function getFile(req, res, type) {
-    console.log(req.url)
     fs.readFile("static" + req.url, function (error, data) {
         res.writeHead(200, { 'Content-Type': type });
         res.write(data);
