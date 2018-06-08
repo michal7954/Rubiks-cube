@@ -1,4 +1,15 @@
 body {
     margin: 0;
     overflow: hidden;
+    position: relative;
+}
+
+#root {
+    position: absolute;
+    top: 0%;
+    right: 0%;
+    z-index: 10;
+    width:25%;
+    height:35%;
+    border: 2px solid black;
 }

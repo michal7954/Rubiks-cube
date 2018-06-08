@@ -1,4 +1,4 @@
-function Game() {
+function Game(placeWhereShow, width, height) {
 
     var raycaster = new THREE.Raycaster();
     var mouseVector = new THREE.Vector2()
@@ -13,8 +13,8 @@ function Game() {
 
     var renderer = new THREE.WebGLRenderer();
     renderer.setClearColor(0x808080);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    $("body").append(renderer.domElement);
+    renderer.setSize(width, height);
+    $(placeWhereShow).append(renderer.domElement);
 
     var axes = new THREE.AxesHelper(1000);
     scene.add(axes);
