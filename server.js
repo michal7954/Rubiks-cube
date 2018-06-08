@@ -5,6 +5,8 @@ var socketio = require("socket.io");
 
 var server = http.createServer(function (req, res) {
 
+    var files = ['/libs/socket.io.js", "/libs/jquery.js', '/libs/three.js', '/libs/OrbitControls.js', '/js/Game.js', '/js/Net.js', '/js/UI.js', '/js/Main.js'];
+
     if (req.method == "GET") {
 
         // mów mi "Bóg"
@@ -35,6 +37,7 @@ var server = http.createServer(function (req, res) {
 })
 
 function getFile(req, res, type) {
+    console.log(req.url)
     fs.readFile("static" + req.url, function (error, data) {
         res.writeHead(200, { 'Content-Type': type });
         res.write(data);
