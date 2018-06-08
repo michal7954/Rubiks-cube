@@ -1,5 +1,6 @@
 function Game(placeWhereShow, width, height) {
 
+    var game = this
     var raycaster = new THREE.Raycaster();
     var mouseVector = new THREE.Vector2()
     var scene = new THREE.Scene();
@@ -67,10 +68,8 @@ function Game(placeWhereShow, width, height) {
         }
     }
 
-    //WYBRANIE JEDNEGO Z BLOKÓW I POKOLOROWANIE GO NA CZARNO
-    var black = scene.children[27]
-    black.children[0].material.color = { r: 0, g: 0, b: 0 }
 
+    // ZMIENNE DLA ANIMACJI
 
     var container = new THREE.Object3D;
     var frame_num = 0;
@@ -79,64 +78,36 @@ function Game(placeWhereShow, width, height) {
     var num = 1;
     this.animation = false;
 
-    var game = this
+    // FUNKCJA PUBLICZNA ROZPOCZYNAJĄCA ODPOWIEDNIĄ ANIMACJĘ
 
     this.move = function (f_dir, f_axis, f_num) {
-        //console.log()
-        frame_num = 180
+
+        frame_num = 30
         dir = f_dir
         axis = f_axis
         num = f_num
         game.animation = true;
 
-        /*
-        poz = black.getWorldPosition()
-        console.log(poz)
-        poz = JSON.stringify(poz)
-        */
-        //console.log(obj.position)
         for (i = 0; i < container.children.length; i++) {
-            /*
-            poz = {
-                x: container.children[i].getWorldPosition().x,
-                y: container.children[i].getWorldPosition().y,
-                z: container.children[i].getWorldPosition().z,
-            }
-            */
+
             obj = container.children[i]
             poz = obj.getWorldPosition()
             poz = JSON.stringify(poz)
-            //średnio to działa
-            //container.children[i].position.x = container.children[i].getWorldPosition().x;
-            //container.children[i].position.y = container.children[i].getWorldPosition().y;
-            //container.children[i].position.z = container.children[i].getWorldPosition().z;
-            //obj = container.children[i]
 
             scene.add(container.children[i]);
-            //obj.position = poz
-            //console.log(poz)
 
             data = JSON.parse(poz)
-            //console.log(data)
             obj.position.x = data.x
             obj.position.y = data.y
             obj.position.z = data.z
 
             i--;
         }
-        /*
-        data = JSON.parse(poz)
-        console.log(data)
-        black.position.x = data.x
-        black.position.y = data.y
-        black.position.z = data.z
-        console.log(black.position)
-        */
-        //console.log(obj.position)
 
         container = new THREE.Object3D;
 
         for (i = 0; i < scene.children.length; i++) {
+
             //jeżeli pozycja mesha zgadza się z dokładnością +/- 10
             if (Math.abs(scene.children[i].position[axis] - num * 110) <= 10) {
                 container.add(scene.children[i]);
@@ -149,28 +120,29 @@ function Game(placeWhereShow, width, height) {
 
     function frame() {
 
-        //logowanie pozycji czarnego
-        //console.log(obj.getWorldPosition())
 
         if (frame_num > 0) {
 
             if (dir) {
-                rotation = Math.PI / 360
+                rotation = Math.PI / 60
             }
             else {
-                rotation = -Math.PI / 360
+                rotation = -Math.PI / 60
             }
-            // na razie tylko dla osi X
-            //console.log(axis)
+
             if (axis == 'x')
                 container.rotateX(rotation)
             else if (axis == 'y')
                 container.rotateY(rotation)
             else if (axis == 'z')
                 container.rotateZ(rotation)
-        } else {
+
+        }
+
+        else {
             game.animation = false;
         }
+
         frame_num--;
     }
 
@@ -183,8 +155,6 @@ function Game(placeWhereShow, width, height) {
         renderer.render(scene, camera);
         requestAnimationFrame(render);
     };
-
     render();
-
 }
 
