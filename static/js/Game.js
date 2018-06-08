@@ -17,7 +17,7 @@ function Game() {
     $("body").append(renderer.domElement);
 
     var axes = new THREE.AxesHelper(1000);
-    scene.add(axes);
+    //scene.add(axes);
 
     camera.position.set(600, 600, 600);
     camera.lookAt(scene.position);
@@ -40,17 +40,37 @@ function Game() {
         for (j = -1; j < 2; j++) {
             for (k = -1; k < 2; k++) {
 
-                var cube = new THREE.Mesh(geometry, material);
-                var cube2 = new THREE.Mesh(geometry, material2);
+                //var block = new THREE.Object3D;
 
-                scene.add(cube);
+                var cube = new THREE.Mesh(geometry, material);
+                //var cube2 = new THREE.Mesh(geometry, material2);
+
+                //block.add(cube);
+                //cube.position.set(i * 110, j * 110, k * 110)
+
+                //block.add(cube2);
                 cube.position.set(i * 110, j * 110, k * 110)
 
-                scene.add(cube2);
-                cube2.position.set(i * 110, j * 110, k * 110)
+                cube.userData = { x: i, y: j, z: k }
+
+                scene.add(cube)
             }
         }
     }
+
+    console.log(scene.children)
+
+    var container = new THREE.Object3D;
+    for (i = 0; i < scene.children.length; i++) {
+        if (scene.children[i].userData.x == -1) {
+            console.log(scene.children[i].userData.x)
+            container.add(scene.children[i])
+        }
+    }
+    console.log(container.children)
+    scene.add(container)
+
+    console.log(scene.children)
 
     angle = Math.PI / 4;
 
@@ -62,6 +82,8 @@ function Game() {
 
         camera.lookAt(scene.position)
         angle = angle + 0.01;
+
+        container.rotateX(Math.PI / 180)
 
         renderer.render(scene, camera);
         requestAnimationFrame(render);
