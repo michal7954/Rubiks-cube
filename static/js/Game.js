@@ -17,7 +17,7 @@ function Game(placeWhereShow, width, height) {
     $(placeWhereShow).append(renderer.domElement);
 
     var axes = new THREE.AxesHelper(1000);
-    //scene.add(axes);
+    scene.add(axes);
 
     camera.position.set(600, 600, 600);
     camera.lookAt(scene.position);
@@ -26,6 +26,9 @@ function Game(placeWhereShow, width, height) {
     orbitControl.addEventListener('change', function () {
         renderer.render(scene, camera)
     });
+
+
+    //DODANIE MESHY
 
     var geometry = new THREE.BoxGeometry(100, 100, 100);
 
@@ -64,32 +67,78 @@ function Game(placeWhereShow, width, height) {
         }
     }
 
-    //console.log(scene.children[0].uuid)
+    //WYBRANIE JEDNEGO Z BLOKÓW I POKOLOROWANIE GO NA CZARNO
+    var black = scene.children[27]
+    black.children[0].material.color = { r: 0, g: 0, b: 0 }
+
 
     var container = new THREE.Object3D;
     var frame_num = 0;
     var dir = 1;
-    var axis = "x"
+    var axis
     var num = 1;
+    this.animation = false;
 
     var game = this
 
     this.move = function (f_dir, f_axis, f_num) {
-
+        //console.log()
         frame_num = 180
         dir = f_dir
         axis = f_axis
         num = f_num
+        game.animation = true;
 
-
+        /*
+        poz = black.getWorldPosition()
+        console.log(poz)
+        poz = JSON.stringify(poz)
+        */
+        //console.log(obj.position)
         for (i = 0; i < container.children.length; i++) {
+            /*
+            poz = {
+                x: container.children[i].getWorldPosition().x,
+                y: container.children[i].getWorldPosition().y,
+                z: container.children[i].getWorldPosition().z,
+            }
+            */
+            obj = container.children[i]
+            poz = obj.getWorldPosition()
+            poz = JSON.stringify(poz)
+            //średnio to działa
+            //container.children[i].position.x = container.children[i].getWorldPosition().x;
+            //container.children[i].position.y = container.children[i].getWorldPosition().y;
+            //container.children[i].position.z = container.children[i].getWorldPosition().z;
+            //obj = container.children[i]
+
             scene.add(container.children[i]);
+            //obj.position = poz
+            //console.log(poz)
+
+            data = JSON.parse(poz)
+            //console.log(data)
+            obj.position.x = data.x
+            obj.position.y = data.y
+            obj.position.z = data.z
+
             i--;
         }
+        /*
+        data = JSON.parse(poz)
+        console.log(data)
+        black.position.x = data.x
+        black.position.y = data.y
+        black.position.z = data.z
+        console.log(black.position)
+        */
+        //console.log(obj.position)
+
         container = new THREE.Object3D;
 
         for (i = 0; i < scene.children.length; i++) {
-            if (scene.children[i].userData[axis] == num) {
+            //jeżeli pozycja mesha zgadza się z dokładnością +/- 10
+            if (Math.abs(scene.children[i].position[axis] - num * 110) <= 10) {
                 container.add(scene.children[i]);
                 i--;
             }
@@ -99,6 +148,10 @@ function Game(placeWhereShow, width, height) {
     }
 
     function frame() {
+
+        //logowanie pozycji czarnego
+        //console.log(obj.getWorldPosition())
+
         if (frame_num > 0) {
 
             if (dir) {
@@ -107,21 +160,24 @@ function Game(placeWhereShow, width, height) {
             else {
                 rotation = -Math.PI / 360
             }
-
-            container.rotateX(rotation)
+            // na razie tylko dla osi X
+            //console.log(axis)
+            if (axis == 'x')
+                container.rotateX(rotation)
+            else if (axis == 'y')
+                container.rotateY(rotation)
+            else if (axis == 'z')
+                container.rotateZ(rotation)
+        } else {
+            game.animation = false;
         }
-        else {
-            //game.move(0, "x", 1)
-        }
-        frame_num--
+        frame_num--;
     }
-
 
 
     angle = Math.PI / 4;
 
     function render() {
-
         frame()
 
         renderer.render(scene, camera);
@@ -130,6 +186,7 @@ function Game(placeWhereShow, width, height) {
 
     render();
 
+<<<<<<< HEAD
 
     function getRandomColor() {
         var letters = '0123456789ABCDEF';
@@ -140,5 +197,7 @@ function Game(placeWhereShow, width, height) {
         return color;
     }
 
+=======
+>>>>>>> 3abd8f2a2c63a38ddc7f30321e5135af768f0031
 }
 
