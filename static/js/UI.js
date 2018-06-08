@@ -5,19 +5,12 @@ function Ui() {
     $("#timer")[0].innerHTML = "0 : 0 : 00";
 
     $(document).keypress(function (e) {
-<<<<<<< HEAD
         if (e.key = "Enter") {
             if (isTimerTickTock == false) {
                 timer();
             }
             if (i % 2 == 1) {
                 c = -1
-=======
-        if (e.key = "Enter" && game.animation == false) {
-            if (i % 3 == 0) {
-                //c = -1
-                a = 'x'
->>>>>>> 3abd8f2a2c63a38ddc7f30321e5135af768f0031
             }
             else if (i % 3 == 1) {
                 //c = 1

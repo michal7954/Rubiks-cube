@@ -186,7 +186,6 @@ function Game(placeWhereShow, width, height) {
 
     render();
 
-<<<<<<< HEAD
 
     function getRandomColor() {
         var letters = '0123456789ABCDEF';
@@ -197,7 +196,5 @@ function Game(placeWhereShow, width, height) {
         return color;
     }
 
-=======
->>>>>>> 3abd8f2a2c63a38ddc7f30321e5135af768f0031
 }
 
