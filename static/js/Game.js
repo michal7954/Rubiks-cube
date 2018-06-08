@@ -1,8 +1,6 @@
-function Game(placeWhereShow, width, height) {
+function Game(target, width, height) {
 
     var game = this
-    var raycaster = new THREE.Raycaster();
-    var mouseVector = new THREE.Vector2()
     var scene = new THREE.Scene();
 
     var camera = new THREE.PerspectiveCamera(
@@ -15,9 +13,10 @@ function Game(placeWhereShow, width, height) {
     var renderer = new THREE.WebGLRenderer();
     renderer.setClearColor(0x808080);
     renderer.setSize(width, height);
-    $(placeWhereShow).append(renderer.domElement);
+    $(target).append(renderer.domElement);
 
     var axes = new THREE.AxesHelper(1000);
+    axes.position.set(-161, -161, -161)
     scene.add(axes);
 
     camera.position.set(600, 600, 600);
@@ -46,7 +45,6 @@ function Game(placeWhereShow, width, height) {
                 var block = new THREE.Object3D;
 
                 var material = new THREE.MeshBasicMaterial({
-                    color: 0xff0,
                     side: THREE.DoubleSide,
                     wireframe: false,
                 });
@@ -73,88 +71,87 @@ function Game(placeWhereShow, width, height) {
 
     var container = new THREE.Object3D;
     var frame_num = 0;
-    var dir = 1;
-    var axis
-    var num = 1;
     this.animation = false;
 
+    var data = {
+        direction: 1,   // (0/1)
+        axis: 'x',      // (x/y/z)
+        row: 1,         // (-1/0/1)
+        duration: 30,   // (1-60) i więcej - czas trwania animacji w klatkach
+    }
+
     // FUNKCJA PUBLICZNA ROZPOCZYNAJĄCA ODPOWIEDNIĄ ANIMACJĘ
+    this.move = function (input_data) {
 
-    this.move = function (f_dir, f_axis, f_num) {
-
-        frame_num = 30
-        dir = f_dir
-        axis = f_axis
-        num = f_num
+        data = input_data;
+        frame_num = data.duration
         game.animation = true;
 
+        // WYPRÓŻNIANIE KONTENERA I AKTUALIZOWANIE POZYCJI BLOCKÓW
         for (i = 0; i < container.children.length; i++) {
 
-            obj = container.children[i]
-            poz = obj.getWorldPosition()
-            poz = JSON.stringify(poz)
+            block = container.children[i]
+            poz = block.getWorldPosition()
 
             scene.add(container.children[i]);
 
-            data = JSON.parse(poz)
-            obj.position.x = data.x
-            obj.position.y = data.y
-            obj.position.z = data.z
+            // JEŚLI JESTEŚ CIEKAWY NAD CZYM SIĘ MĘCZYŁEM PRZEZ OK 2H TO ZAKOMENTUJ TE TRZY LINIJKI...
+            block.position.x = poz.x
+            block.position.y = poz.y
+            block.position.z = poz.z
+
+            // I ODKOMENTUJ TĘ, MNIEJ WIĘCEJ TO I TYM PODOBNE SPRAWIAŁY MI TRUDNOŚĆ
+            //block.position = poz
 
             i--;
         }
-
         container = new THREE.Object3D;
 
+        // DYNAMICZNE PUSHOWANIE RZĘDU DO KONTENERA
         for (i = 0; i < scene.children.length; i++) {
 
-            //jeżeli pozycja mesha zgadza się z dokładnością +/- 10
-            if (Math.abs(scene.children[i].position[axis] - num * 110) <= 10) {
+            //jeżeli pozycja mesha zgadza się z dokładnością +/- 1
+            if (Math.abs(scene.children[i].position[data.axis] - data.row * 110) <= 1) {
                 container.add(scene.children[i]);
                 i--;
             }
         }
-
         scene.add(container)
     }
 
     function frame() {
-
-
         if (frame_num > 0) {
 
-            if (dir) {
-                rotation = Math.PI / 60
+            if (data.direction) {
+                rotation = Math.PI / data.duration / 2
             }
             else {
-                rotation = -Math.PI / 60
+                rotation = -Math.PI / data.duration / 2
             }
 
-            if (axis == 'x')
-                container.rotateX(rotation)
-            else if (axis == 'y')
-                container.rotateY(rotation)
-            else if (axis == 'z')
-                container.rotateZ(rotation)
+            switch (data.axis) {
+                case 'x':
+                    container.rotateX(rotation);
+                    break;
+                case 'y':
+                    container.rotateY(rotation);
+                    break;
+                case 'z':
+                    container.rotateZ(rotation);
+                    break;
+            }
+            frame_num--;
 
         }
-
         else {
             game.animation = false;
         }
-
-        frame_num--;
     }
 
-
-    angle = Math.PI / 4;
-
     function render() {
-        frame()
-
+        if (game.animation) frame()
         renderer.render(scene, camera);
         requestAnimationFrame(render);
     };
     render();
 }
-

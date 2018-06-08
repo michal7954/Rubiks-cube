@@ -4,20 +4,29 @@ function Ui() {
 
     $(document).keypress(function (e) {
         if (e.key = "Enter" && game.animation == false) {
-            if (i % 3 == 0) {
-                //c = -1
-                a = 'x'
+
+            var input_data = {
+                direction: 1,
+                axis: 'x',
+                row: 1,
+                duration: 15,
             }
-            else if (i % 3 == 1) {
-                //c = 1
-                a = 'y'
+
+            switch (i % 3) {
+                case 0:
+                    input_data.axis = 'x'
+                    break;
+                case 1:
+                    input_data.axis = 'y'
+                    break;
+                case 2:
+                    input_data.axis = 'z'
+                    break;
             }
-            else if (i % 3 == 2) {
-                //c = 1
-                a = 'z'
-            }
+
             net.client.emit("bla");
-            game.move(0, a, 1)
+            game.move(input_data)
+
             i++;
         }
     });
