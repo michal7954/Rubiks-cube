@@ -15,9 +15,11 @@ var server = http.createServer(function (req, res) {
         else if (req.url == "/css/style.css") {
             getFile(req, res, "text/css")
         }
-        else if (req.url != "/") {
-            getFile(req, res, "text/html")
-        }
+        /*else if (req.url != "/") {
+            for (var i = 0; i < filesThatServerRequire.length; i++) {
+                getFile(req, res, filesThatServerRequire[i]);
+            }
+        }*/
     }
 
     //AJAX somsiedzie
@@ -35,6 +37,7 @@ var server = http.createServer(function (req, res) {
 })
 
 function getFile(req, res, type) {
+    console.log(req.url)
     fs.readFile("static" + req.url, function (error, data) {
         res.writeHead(200, { 'Content-Type': type });
         res.write(data);
