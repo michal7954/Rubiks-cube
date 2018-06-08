@@ -56,7 +56,7 @@ io.sockets.on("connection", function (client) {
     })
 
     client.on("bla", function () {
-        console.log("MESSAGE FORM CLIENT");
+        console.log("MESSAGE FROM CLIENT");
     })
 
 })
