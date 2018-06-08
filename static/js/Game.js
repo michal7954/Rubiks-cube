@@ -75,17 +75,19 @@ function Game(placeWhereShow, width, height) {
     var container = new THREE.Object3D;
     var frame_num = 0;
     var dir = 1;
-    var axis = "x"
+    var axis
     var num = 1;
+    this.animation = false;
 
     var game = this
 
     this.move = function (f_dir, f_axis, f_num) {
-
+        //console.log()
         frame_num = 180
         dir = f_dir
         axis = f_axis
         num = f_num
+        game.animation = true;
 
         /*
         poz = black.getWorldPosition()
@@ -159,16 +161,23 @@ function Game(placeWhereShow, width, height) {
                 rotation = -Math.PI / 360
             }
             // na razie tylko dla osi X
-            container.rotateX(rotation)
+            //console.log(axis)
+            if (axis == 'x')
+                container.rotateX(rotation)
+            else if (axis == 'y')
+                container.rotateY(rotation)
+            else if (axis == 'z')
+                container.rotateZ(rotation)
+        } else {
+            game.animation = false;
         }
-        frame_num--
+        frame_num--;
     }
 
 
     angle = Math.PI / 4;
 
     function render() {
-
         frame()
 
         renderer.render(scene, camera);
