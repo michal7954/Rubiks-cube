@@ -15,3 +15,14 @@ html, body {
     height: 35%;
     border: 2px solid black;
 }
+
+#timer {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    z-index: 10;
+    width: 25%;
+    height: 35%;
+    font-size: 60px;
+    color: white;
+}

@@ -139,5 +139,6 @@ function Game(placeWhereShow, width, height) {
         }
         return color;
     }
+
 }
 
