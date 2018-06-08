@@ -6,7 +6,7 @@ function Game(placeWhereShow, width, height) {
 
     var camera = new THREE.PerspectiveCamera(
         45,
-        window.innerWidth / window.innerHeight,
+        width / height,
         0.1,
         10000
     );
@@ -40,37 +40,32 @@ function Game(placeWhereShow, width, height) {
         for (j = -1; j < 2; j++) {
             for (k = -1; k < 2; k++) {
 
-                //var block = new THREE.Object3D;
+                var block = new THREE.Object3D;
 
                 var cube = new THREE.Mesh(geometry, material);
-                //var cube2 = new THREE.Mesh(geometry, material2);
+                block.add(cube);
 
-                //block.add(cube);
-                //cube.position.set(i * 110, j * 110, k * 110)
+                var cube2 = new THREE.Mesh(geometry, material2);
+                block.add(cube2);
 
-                //block.add(cube2);
-                cube.position.set(i * 110, j * 110, k * 110)
+                block.position.set(i * 110, j * 110, k * 110)
+                block.userData = { x: i, y: j, z: k }
 
-                cube.userData = { x: i, y: j, z: k }
-
-                scene.add(cube)
+                scene.add(block);
             }
         }
     }
 
-    console.log(scene.children)
-
     var container = new THREE.Object3D;
+
     for (i = 0; i < scene.children.length; i++) {
         if (scene.children[i].userData.x == -1) {
-            console.log(scene.children[i].userData.x)
-            container.add(scene.children[i])
+            container.add(scene.children[i]);
+            i--;
         }
     }
-    console.log(container.children)
-    scene.add(container)
 
-    console.log(scene.children)
+    scene.add(container)
 
     angle = Math.PI / 4;
 
@@ -81,9 +76,9 @@ function Game(placeWhereShow, width, height) {
         camera.position.z = 600 * Math.sin(angle);
 
         camera.lookAt(scene.position)
-        angle = angle + 0.01;
+        angle = angle + 0.001;
 
-        container.rotateX(Math.PI / 180)
+        container.rotateX(Math.PI / 360)
 
         renderer.render(scene, camera);
         requestAnimationFrame(render);

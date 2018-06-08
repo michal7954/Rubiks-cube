@@ -9,7 +9,7 @@ var server = http.createServer(function (req, res) {
 
     if (req.method == "GET") {
 
-        // mów mi "Bóg"
+
         if (req.url === "/") {
             req.url = "/index.html"
             getFile(req, res, "text/html")
