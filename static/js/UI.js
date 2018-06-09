@@ -1,8 +1,8 @@
 function Ui() {
 
     var i = 0
-    var isTimerTickTock = false;
-    $("#timer")[0].innerHTML = "0 : 0 : 00";
+    var isTimerTickTock = false
+    $("#timer")[0].innerHTML = "00:00:00";
 
     $(document).keypress(function (e) {
         if (e.key = "Enter" && game.animation == false) {
@@ -38,21 +38,22 @@ function Ui() {
     });
 
     function timer() {
-        var minutesInTimer = 0
-        var secondsInTimer = 0
-        var milisecondsInTimer = 0
+        var timeAtStartPoint = new Date().getTime()
         isTimerTickTock = true;
         setInterval(function () {
-            milisecondsInTimer = milisecondsInTimer + 1;
-            if (milisecondsInTimer > 999) {
-                secondsInTimer = secondsInTimer + 1;
-                milisecondsInTimer = 0
+            var timeInTimer = new Date().getTime();
+            var timeLeft = timeInTimer - timeAtStartPoint;
+            var secs = Math.floor((timeLeft % (60 * 1000)) / 1000)
+            var mins = Math.floor((timeLeft / (60 * 1000)))
+            var mili = Math.floor((timeLeft % 1000))
+            if (secs < 10) {
+                secs = "0" + secs;
             }
-            if (secondsInTimer > 59) {
-                minutesInTimer = minutesInTimer + 1;
-                secondsInTimer = 0
+            if (mins < 10) {
+                mins = "0" + mins
             }
-            $("#timer")[0].innerHTML = minutesInTimer + " : " + secondsInTimer + " : " + milisecondsInTimer;
+            $("#timer")[0].innerHTML = mins + ":" + secs + ":" + mili
         }, 1)
     }
 }
+

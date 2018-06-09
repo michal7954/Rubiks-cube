@@ -66,7 +66,6 @@ function Game(target, width, height) {
         }
     }
 
-
     // ZMIENNE DLA ANIMACJI
 
     var container = new THREE.Object3D;
