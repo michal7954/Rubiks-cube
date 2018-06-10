@@ -7,9 +7,6 @@ function Ui() {
     $(document).keypress(function (e) {
         if (e.key = "Enter" && game.animation == false) {
 
-            if (isTimerTickTock == false) {
-                timer();
-            }
 
             var input_data = {
                 direction: 1,
@@ -36,23 +33,4 @@ function Ui() {
             i++;
         }
     });
-
-    function timer() {
-        var minutesInTimer = 0
-        var secondsInTimer = 0
-        var milisecondsInTimer = 0
-        isTimerTickTock = true;
-        setInterval(function () {
-            milisecondsInTimer = milisecondsInTimer + 1;
-            if (milisecondsInTimer > 999) {
-                secondsInTimer = secondsInTimer + 1;
-                milisecondsInTimer = 0
-            }
-            if (secondsInTimer > 59) {
-                minutesInTimer = minutesInTimer + 1;
-                secondsInTimer = 0
-            }
-            $("#timer")[0].innerHTML = minutesInTimer + " : " + secondsInTimer + " : " + milisecondsInTimer;
-        }, 1)
-    }
 }
