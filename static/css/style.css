@@ -26,3 +26,21 @@ html, body {
     font-size: 60px;
     color: white;
 }
+
+#info {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    background-color: silver;
+    border: 2px solid black;
+}
+
+#info button {
+    margin: 4px;
+    width: 24px;
+    height: 24px;
+}
+
+.picked {
+    background-color: red;
+}

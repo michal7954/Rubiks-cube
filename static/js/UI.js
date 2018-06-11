@@ -5,7 +5,7 @@ function Ui() {
     $("#timer")[0].innerHTML = "00:00:00";
 
     $(document).keypress(function (e) {
-        if (e.key = "Enter" && game.animation == false) {
+        if (e.key == "Enter" && game.animation == false) {
 
             if (isTimerTickTock == false) {
                 timer();
@@ -35,6 +35,29 @@ function Ui() {
 
             i++;
         }
+
+        //STRZAŁKI
+        console.log(e.key)
+
+        if ((e.key == "2" || e.key == "4") && game.animation == false) {
+
+            if (isTimerTickTock == false) {
+                timer();
+            }
+
+            var input_data = {
+                direction: 1,
+                axis: 'x',
+                row: 1,
+                duration: 15,
+            }
+
+            net.client.emit("bla");
+            game.move(input_data)
+
+            i++;
+        }
+
     });
 
     function timer() {
@@ -55,4 +78,31 @@ function Ui() {
             $("#timer")[0].innerHTML = mins + ":" + secs + ":" + mili
         }, 1)
     }
+
+
+    //BUTTONY
+    var axis = 'x'
+    $('.axis').on('click', function () {
+        $('.axis.picked').removeClass('picked')
+        $(this).addClass('picked')
+        axis = $(this).val()
+        console.log(axis)
+    })
+
+    var row = -1
+    $('.row').on('click', function () {
+        $('.row.picked').removeClass('picked')
+        $(this).addClass('picked')
+        row = $(this).val()
+        console.log(row)
+    })
+
+
+
+
+
+
+
+
+
 }
