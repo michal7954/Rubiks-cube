@@ -92,6 +92,8 @@ function Game(target, width, height) {
 
             block = container.children[i]
             poz = block.getWorldPosition()
+            direct = block.getWorldDirection();
+            console.log(block)
 
             scene.add(container.children[i]);
 
@@ -99,6 +101,11 @@ function Game(target, width, height) {
             block.position.x = poz.x
             block.position.y = poz.y
             block.position.z = poz.z
+
+
+            /*block.rotation.x = direct.x
+            block.rotation.y = direct.y
+            block.rotation.z = direct.z*/
 
             // I ODKOMENTUJ TĘ, MNIEJ WIĘCEJ TO I TYM PODOBNE SPRAWIAŁY MI TRUDNOŚĆ
             //block.position = poz
