@@ -2,7 +2,7 @@ function Game(target, width, height) {
 
     var game = this
     var scene = new THREE.Scene();
-
+    var loader = new THREE.OBJLoader();
     var camera = new THREE.PerspectiveCamera(
         45,
         width / height,
@@ -26,6 +26,34 @@ function Game(target, width, height) {
     orbitControl.addEventListener('change', function () {
         renderer.render(scene, camera)
     });
+
+    //Ładowanie Modelu
+
+    loader.load(
+        // resource URL
+        'gfx/RubikModel.obj',
+        // called when resource is loaded
+        function (object) {
+
+            scene.add(object);
+            console.log(object)
+
+        },
+        // called when loading is in progresses
+        function (xhr) {
+
+            console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+
+        },
+        // called when loading has errors
+        function (error) {
+
+            console.log('An error happened');
+
+        }
+    );
+
+    //
 
 
     //DODANIE MESHY

@@ -11,6 +11,7 @@ var server = http.createServer(function (req, res) {
         '/libs/socket.io.js',
         '/libs/jquery.js',
         '/libs/three.js',
+        '/libs/OBJLoader.js',
         '/libs/OrbitControls.js',
         '/js/Game.js',
         '/js/Net.js',
