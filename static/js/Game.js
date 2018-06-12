@@ -25,6 +25,7 @@ function Game(target, width, height) {
     var orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
     orbitControl.addEventListener('change', function () {
         renderer.render(scene, camera)
+        net.client.emit("cameraChange", camera.position);
     });
 
     //Ładowanie Modelu

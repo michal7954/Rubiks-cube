@@ -54,8 +54,8 @@ function Ui() {
                 input_data.direction = 1;
             }
 
-            net.client.emit("bla");
             game.move(input_data)
+            net.client.emit("cubeChange", input_data);
 
         }
 
@@ -75,9 +75,8 @@ function Ui() {
                 input_data.direction = 0;
             }
 
-            net.client.emit("bla");
             game.move(input_data)
-
+            net.client.emit("cubeChange", input_data);
         }
 
     });
