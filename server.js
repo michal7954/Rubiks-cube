@@ -44,16 +44,29 @@ server.listen(3000, function () {
 
 var io = socketio.listen(server)
 
+var clients = [];
+
 io.sockets.on("connection", function (client) {
 
-    console.log("CLIENT: " + client.id)
+    if (clients[0] == null) {
+        clients[0] = client;
+    }
+    else if (clients[1] == null) {
+        clients[1] = client;
+    }
+
+    console.log("CON: " + client.id)
 
     client.emit("onconnect", {
-        clientName: client.id
+        clientName: client.id,
+        num: clients.indexOf(client)
     })
 
     client.on("disconnect", function () {
-        console.log("CLIENT DISCONNECT");
+        if (clients.indexOf(client) != -1) {
+            clients[clients.indexOf(client)] = null;
+        }
+        console.log("DIS: " + client.id);
     })
 
     client.on("bla", function () {
