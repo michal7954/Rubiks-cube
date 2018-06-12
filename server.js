@@ -13,8 +13,7 @@ var server = http.createServer(function (req, res) {
         '/libs/three.js',
         '/libs/OBJLoader.js',
         '/libs/OrbitControls.js',
-        '/js/Preview.js',
-        '/js/Game.js',
+        '/js/View.js',
         '/js/Net.js',
         '/js/UI.js',
         '/js/Main.js',
@@ -77,6 +76,15 @@ io.sockets.on("connection", function (client) {
 
     client.on("bla", function () {
         console.log("MESSAGE FROM CLIENT");
+    })
+
+    client.on("cubeChange", function (input_data) {
+        client.broadcast.emit("cubeChange", input_data);
+    })
+
+    client.on("cameraChange", function (position) {
+        client.broadcast.emit("cameraChange", position);
+
     })
 
 })

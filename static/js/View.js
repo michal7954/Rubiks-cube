@@ -1,6 +1,6 @@
-function Preview(target, width, height) {
+function View(target, width, height) {
 
-    var game = this
+    var view = this
     var scene = new THREE.Scene();
     var loader = new THREE.OBJLoader();
     var camera = new THREE.PerspectiveCamera(
@@ -21,6 +21,15 @@ function Preview(target, width, height) {
 
     camera.position.set(600, 600, 600);
     camera.lookAt(scene.position);
+
+    if (target == 'body') {
+        var orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
+        orbitControl.addEventListener('change', function () {
+            renderer.render(scene, camera)
+            if (net.playerNum != -1)
+                net.client.emit("cameraChange", camera.position);
+        });
+    }
 
 
     //Ładowanie Modelu
@@ -109,7 +118,7 @@ function Preview(target, width, height) {
 
         data = input_data;
         frame_num = data.duration
-        game.animation = true;
+        view.animation = true;
 
         // WYPRÓŻNIANIE KONTENERA I AKTUALIZOWANIE POZYCJI BLOCKÓW
         for (i = 0; i < container.children.length; i++) {
@@ -151,7 +160,9 @@ function Preview(target, width, height) {
     }
 
     this.changeCamera = function (position) {
-        camera.position = position;
+        camera.position.x = position.x;
+        camera.position.y = position.y;
+        camera.position.z = position.z;
         camera.lookAt(scene.position)
     }
 
@@ -180,12 +191,12 @@ function Preview(target, width, height) {
 
         }
         else {
-            game.animation = false;
+            view.animation = false;
         }
     }
 
     function render() {
-        if (game.animation) frame()
+        if (view.animation) frame()
         renderer.render(scene, camera);
         requestAnimationFrame(render);
     };
