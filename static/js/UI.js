@@ -30,16 +30,35 @@ function Ui() {
                     break;
             }
 
-            net.client.emit("bla");
+
             game.move(input_data)
 
             i++;
         }
 
         //STRZAŁKI
-        console.log(e.key)
 
-        if ((e.key == "2" || e.key == "4") && game.animation == false) {
+        if ((e.key == "ArrowLeft" || e.key == "ArrowDown") && game.animation == false) {
+
+            if (isTimerTickTock == false) {
+                timer();
+            }
+
+            var input_data = {
+                direction: 0,
+                axis: axis,
+                row: row,
+                duration: 15,
+            }
+            if (axis == 'x') {
+                input_data.direction = 1;
+            }
+
+            game.move(input_data)
+
+        }
+
+        if ((e.key == "ArrowUp" || e.key == "ArrowRight") && game.animation == false) {
 
             if (isTimerTickTock == false) {
                 timer();
@@ -47,15 +66,15 @@ function Ui() {
 
             var input_data = {
                 direction: 1,
-                axis: 'x',
-                row: 1,
+                axis: axis,
+                row: row,
                 duration: 15,
             }
+            if (axis == 'x') {
+                input_data.direction = 0;
+            }
 
-            net.client.emit("bla");
             game.move(input_data)
-
-            i++;
         }
 
     });
