@@ -116,6 +116,9 @@ function View(target, width, height) {
     // FUNKCJA PUBLICZNA ROZPOCZYNAJĄCA ODPOWIEDNIĄ ANIMACJĘ
     this.move = function (input_data) {
 
+        if (net.playerNum != -1 && target == 'body')
+            net.client.emit("cubeChange", input_data);
+
         data = input_data;
         frame_num = data.duration
         view.animation = true;
@@ -157,6 +160,9 @@ function View(target, width, height) {
             }
         }
         scene.add(container)
+
+
+
     }
 
     this.changeCamera = function (position) {

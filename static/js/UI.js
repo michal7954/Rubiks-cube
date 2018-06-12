@@ -30,7 +30,7 @@ function Ui() {
                     break;
             }
 
-            net.client.emit("bla");
+
             game.move(input_data)
 
             i++;
@@ -55,8 +55,6 @@ function Ui() {
             }
 
             game.move(input_data)
-            if (net.playerNum != -1)
-                net.client.emit("cubeChange", input_data);
 
         }
 
@@ -77,8 +75,6 @@ function Ui() {
             }
 
             game.move(input_data)
-            if (net.playerNum != -1)
-                net.client.emit("cubeChange", input_data);
         }
 
     });

@@ -59,7 +59,7 @@ io.sockets.on("connection", function (client) {
         io.sockets.emit("createPreview");
     }
 
-    console.log("CON: " + client.id)
+    //console.log("CON: " + client.id)
 
 
     client.emit("onconnect", {
@@ -71,11 +71,7 @@ io.sockets.on("connection", function (client) {
         if (clients.indexOf(client) != -1) {
             clients[clients.indexOf(client)] = null;
         }
-        console.log("DIS: " + client.id);
-    })
-
-    client.on("bla", function () {
-        console.log("MESSAGE FROM CLIENT");
+        //console.log("DIS: " + client.id);
     })
 
     client.on("cubeChange", function (input_data) {

@@ -9,7 +9,7 @@ function Net() {
 
         }
         else {
-            console.log(data)
+            //console.log(data)
         }
         net.playerNum = data.num
     })
