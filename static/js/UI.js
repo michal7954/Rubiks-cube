@@ -37,7 +37,6 @@ function Ui() {
         }
 
         //STRZAŁKI
-        console.log(e.key)
 
         if ((e.key == "ArrowLeft" || e.key == "ArrowDown") && game.animation == false) {
 

@@ -121,7 +121,7 @@ function Game(target, width, height) {
             block = container.children[i]
             poz = block.getWorldPosition()
             direct = block.getWorldDirection();
-            console.log(block)
+            //console.log(block)
 
             scene.add(container.children[i]);
 
