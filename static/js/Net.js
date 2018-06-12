@@ -11,4 +11,10 @@ function Net() {
         }
 
     })
+
+    this.client.on('createPreview', function () {
+        if (!preview) {
+            preview = new Preview("#root", $("#root")[0].clientWidth, $("#root")[0].clientHeight);
+        }
+    })
 }

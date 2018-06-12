@@ -13,6 +13,7 @@ var server = http.createServer(function (req, res) {
         '/libs/three.js',
         '/libs/OBJLoader.js',
         '/libs/OrbitControls.js',
+        '/js/Preview.js',
         '/js/Game.js',
         '/js/Net.js',
         '/js/UI.js',
@@ -50,12 +51,17 @@ io.sockets.on("connection", function (client) {
 
     if (clients[0] == null) {
         clients[0] = client;
+        if (clients[1]) {
+            io.sockets.emit("createPreview");
+        }
     }
     else if (clients[1] == null) {
         clients[1] = client;
+        io.sockets.emit("createPreview");
     }
 
     console.log("CON: " + client.id)
+
 
     client.emit("onconnect", {
         clientName: client.id,
