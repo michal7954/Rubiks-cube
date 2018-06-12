@@ -1,8 +1,9 @@
 function Game(target, width, height) {
 
     var game = this
+    /*var loader = new THREE.JSONLoader();
+    var loader1 = new THREE.JSONLoader();*/
     var scene = new THREE.Scene();
-    var loader = new THREE.OBJLoader();
     var camera = new THREE.PerspectiveCamera(
         45,
         width / height,
@@ -27,34 +28,36 @@ function Game(target, width, height) {
         renderer.render(scene, camera)
     });
 
-    //Ładowanie Modelu
+    //Tablice dla odpowiednich ścian kostki, aby każda ściana miała identyczny a zarazem różny kolor
 
-    loader.load(
-        // resource URL
-        'gfx/RubikModel.obj',
-        // called when resource is loaded
-        function (object) {
+    var blocksOfX = []
+    for (a = 0; a < 3; a++) {
+        blocksOfX[a] = []
+    }
+    var blocksOfMinusX = []
+    for (a = 0; a < 3; a++) {
+        blocksOfMinusX[a] = []
+    }
 
-            scene.add(object);
-            console.log(object)
+    var blocksOfY = []
+    for (a = 0; a < 3; a++) {
+        blocksOfY[a] = []
+    }
+    var blocksOfMinusY = []
+    for (a = 0; a < 3; a++) {
+        blocksOfMinusY[a] = []
+    }
 
-        },
-        // called when loading is in progresses
-        function (xhr) {
-
-            console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-
-        },
-        // called when loading has errors
-        function (error) {
-
-            console.log('An error happened');
-
-        }
-    );
+    var blocksOfZ = []
+    for (a = 0; a < 3; a++) {
+        blocksOfZ[a] = []
+    }
+    var blocksOfMinusZ = []
+    for (a = 0; a < 3; a++) {
+        blocksOfMinusZ[a] = []
+    }
 
     //
-
 
     //DODANIE MESHY
 
@@ -66,6 +69,19 @@ function Game(target, width, height) {
         wireframe: true,
     });
 
+    var materialModel = new THREE.MeshBasicMaterial({
+        side: THREE.DoubleSide,
+        wireframe: false,
+        color: 0xff0000
+    });
+
+
+    //
+    // Oś X == i
+    // Oś Y == j
+    // Oś Z == k
+    //
+
     for (i = -1; i < 2; i++) {
         for (j = -1; j < 2; j++) {
             for (k = -1; k < 2; k++) {
@@ -75,10 +91,9 @@ function Game(target, width, height) {
                 var material = new THREE.MeshBasicMaterial({
                     side: THREE.DoubleSide,
                     wireframe: false,
+                    color: 0x000
                 });
-                material.color.r = Math.random(0, 255)
-                material.color.g = Math.random(0, 255)
-                material.color.b = Math.random(0, 255)
+
 
                 var cube = new THREE.Mesh(geometry, material);
                 block.add(cube);
@@ -88,12 +103,162 @@ function Game(target, width, height) {
 
                 block.position.set(i * 110, j * 110, k * 110)
                 block.userData = { x: i, y: j, z: k }
-
                 scene.add(block);
+
+                if (i == -1) {
+                    blocksOfMinusX[j + 1][k + 1] = block
+                }
+                if (i == 1) {
+                    blocksOfX[j + 1][k + 1] = block
+                }
+                if (j == -1) {
+                    blocksOfMinusY[i + 1][k + 1] = block
+                }
+                if (j == 1) {
+                    blocksOfY[i + 1][k + 1] = block
+                }
+                if (k == -1) {
+                    blocksOfMinusZ[i + 1][j + 1] = block
+                }
+                if (k == 1) {
+                    blocksOfZ[i + 1][j + 1] = block
+                }
             }
         }
     }
 
+    //
+
+    // Ładowanie 6 różnych modeli, aby miały ten sam kolor ścian. Dodatkowo tutaj dodaje do Bloków z tablicy właśnie te modele
+
+    var modelX = new Model();
+    modelX.loadModel("gfx/nalepka.json", function (data) {
+
+        var materialX = new THREE.MeshBasicMaterial({
+            side: THREE.DoubleSide,
+            wireframe: false,
+            color: 0xff0000
+        });
+
+        for (j = -1; j < 2; j++) {
+            for (k = -1; k < 2; k++) {
+                var clone = data.clone()
+                clone.scale.set(40, 40, 1)
+                clone.material = materialX
+                clone.position.set(55, 1, 1)
+                clone.rotateY(Math.PI / 2)
+                clone.userData = { x: 1, y: j, z: k }
+                blocksOfX[j + 1][k + 1].add(clone)
+            }
+        }
+    })
+
+    var modelMinusX = new Model();
+    modelMinusX.loadModel("gfx/nalepka1.json", function (data) {
+        var materialMinusX = new THREE.MeshBasicMaterial({
+            side: THREE.DoubleSide,
+            wireframe: false,
+            color: 0x00ff00
+        });
+
+        for (j = -1; j < 2; j++) {
+            for (k = -1; k < 2; k++) {
+                var clone = data.clone()
+                clone.scale.set(40, 40, 1)
+                clone.material = materialMinusX
+                clone.position.set(-55, 1, 1)
+                clone.rotateY(Math.PI / 2)
+                clone.userData = { x: -1, y: j, z: k }
+                blocksOfMinusX[j + 1][k + 1].add(clone)
+            }
+        }
+    })
+
+    var modelY = new Model();
+    modelY.loadModel("gfx/nalepka2.json", function (data) {
+        var materialY = new THREE.MeshBasicMaterial({
+            side: THREE.DoubleSide,
+            wireframe: false,
+            color: 0x0000ff
+        });
+
+        for (i = -1; i < 2; i++) {
+            for (k = -1; k < 2; k++) {
+                var clone = data.clone()
+                clone.scale.set(40, 40, 1)
+                clone.material = materialY
+                clone.position.set(1, 55, 1)
+                clone.rotateX(Math.PI / 2)
+                clone.userData = { x: i, y: 1, z: k }
+                blocksOfY[i + 1][k + 1].add(clone)
+            }
+        }
+    })
+
+    var modelMinusY = new Model();
+    modelMinusY.loadModel("gfx/nalepka3.json", function (data) {
+        var materialMinusY = new THREE.MeshBasicMaterial({
+            side: THREE.DoubleSide,
+            wireframe: false,
+            color: 0x00ffff
+        });
+
+        for (i = -1; i < 2; i++) {
+            for (k = -1; k < 2; k++) {
+                var clone = data.clone()
+                clone.scale.set(40, 40, 1)
+                clone.material = materialMinusY
+                clone.position.set(1, -55, 1)
+                clone.rotateX(Math.PI / 2)
+                clone.userData = { x: i, y: -1, z: k }
+                blocksOfMinusY[i + 1][k + 1].add(clone)
+            }
+        }
+    })
+
+    var modelZ = new Model();
+    modelZ.loadModel("gfx/nalepka4.json", function (data) {
+        var materialZ = new THREE.MeshBasicMaterial({
+            side: THREE.DoubleSide,
+            wireframe: false,
+            color: 0xffff00
+        });
+
+        for (i = -1; i < 2; i++) {
+            for (j = -1; j < 2; j++) {
+                var clone = data.clone()
+                clone.scale.set(40, 40, 1)
+                clone.material = materialZ
+                clone.position.set(1, 1, 55)
+                clone.rotateZ(Math.PI / 2)
+                clone.userData = { x: i, y: j, z: 1 }
+                blocksOfZ[i + 1][j + 1].add(clone)
+            }
+        }
+    })
+
+    var modelMinusZ = new Model();
+    modelMinusZ.loadModel("gfx/nalepka5.json", function (data) {
+        var materialMinusZ = new THREE.MeshBasicMaterial({
+            side: THREE.DoubleSide,
+            wireframe: false,
+            color: 0xff00ff
+        });
+
+        for (i = -1; i < 2; i++) {
+            for (j = -1; j < 2; j++) {
+                var clone = data.clone()
+                clone.scale.set(40, 40, 1)
+                clone.material = materialMinusZ
+                clone.position.set(1, 1, -55)
+                clone.rotateZ(Math.PI / 2)
+                clone.userData = { x: i, y: j, z: -1 }
+                blocksOfMinusZ[i + 1][j + 1].add(clone)
+            }
+        }
+    })
+
+    //
 
     // ZMIENNE DLA ANIMACJI
 
@@ -121,7 +286,6 @@ function Game(target, width, height) {
             block = container.children[i]
             poz = block.getWorldPosition()
             direct = block.getWorldDirection();
-            console.log(block)
 
             scene.add(container.children[i]);
 

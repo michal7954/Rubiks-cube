@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pl">
 
 <head>
@@ -12,18 +12,21 @@
     <script src="./libs/socket.io.js"></script>
     <script src="./libs/jquery.js"></script>
     <script src="./libs/three.js"></script>
-    <script src="./libs/OBJLoader.js"></script>
     <script src="./libs/OrbitControls.js"></script>
 
+    <script src="./js/Model.js"></script>
     <script src="./js/Game.js"></script>
     <script src="./js/Net.js"></script>
     <script src="./js/UI.js"></script>
     <script src="./js/Main.js"></script>
-
 </head>
 
 <body>
     <div id="root">
+    </div>
+    <div id="timer">
+    </div>
+    <div id="yourRubik">
     </div>
     <div id="info">
         <div id="axis">
@@ -37,8 +40,7 @@
             <button class="row" value="1">3</button>
         </div>
     </div>
-    <div id="timer">
-    </div>
+    
 </body>
 
 </html>

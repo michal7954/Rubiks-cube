@@ -11,15 +11,22 @@ var server = http.createServer(function (req, res) {
         '/libs/socket.io.js',
         '/libs/jquery.js',
         '/libs/three.js',
-        '/libs/OBJLoader.js',
         '/libs/OrbitControls.js',
+        '/js/Model.js',
         '/js/Game.js',
         '/js/Net.js',
         '/js/UI.js',
         '/js/Main.js',
+        '/gfx/nalepka.json',
+        '/gfx/nalepka1.json',
+        '/gfx/nalepka2.json',
+        '/gfx/nalepka3.json',
+        '/gfx/nalepka4.json',
+        '/gfx/nalepka5.json',
     ];
 
     if (req.method == "GET") {
+        console.log(req.url)
         if (files.includes(req.url)) {
             getFile(req, res);
         }
