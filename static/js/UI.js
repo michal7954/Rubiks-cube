@@ -4,7 +4,7 @@ function Ui() {
     var isTimerTickTock = false
     $("#timer")[0].innerHTML = "00:00:00";
 
-    $(document).keypress(function (e) {
+    $(document).keydown(function (e) {
         if (e.key == "Enter" && game.animation == false) {
 
             if (isTimerTickTock == false) {
@@ -55,7 +55,7 @@ function Ui() {
             }
 
             game.move(input_data)
-
+            
         }
 
         else if ((e.key == "ArrowUp" || e.key == "ArrowRight") && game.animation == false) {
@@ -126,13 +126,4 @@ function Ui() {
         $(this).addClass('picked')
         row = $(this).val()
     })
-
-
-
-
-
-
-
-
-
 }
