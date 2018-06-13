@@ -68,7 +68,7 @@ function View(target, width, height) {
     var geometry = new THREE.BoxGeometry(100, 100, 100);
 
     var material2 = new THREE.MeshBasicMaterial({
-        color: 0x000000,
+        color: 0xffffff,
         side: THREE.DoubleSide,
         wireframe: true,
     });
