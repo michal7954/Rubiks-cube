@@ -314,10 +314,7 @@ function View(target, width, height) {
                 i--;
             }
         }
-        scene.add(container)
-
-
-
+        scene.add(container);
     }
 
     this.changeCamera = function (position) {
