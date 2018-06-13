@@ -261,9 +261,6 @@ function View(target, width, height) {
             }
         }
     })
-
-    //
-
     // ZMIENNE DLA ANIMACJI
 
     var container = new THREE.Object3D;
@@ -287,27 +284,22 @@ function View(target, width, height) {
         frame_num = data.duration
         view.animation = true;
 
-        // WYPRÓŻNIANIE KONTENERA I AKTUALIZOWANIE POZYCJI BLOCKÓW
+        // WYPRÓŻNIANIE KONTENERA I AKTUALIZOWANIE POZYCJI ORAZ ROTACJI BLOKÓW
         for (i = 0; i < container.children.length; i++) {
 
             block = container.children[i]
-            poz = block.getWorldPosition()
-            direct = block.getWorldDirection();
+            position = block.getWorldPosition()
+            rotation = block.getWorldRotation();
 
             scene.add(container.children[i]);
 
-            // JEŚLI JESTEŚ CIEKAWY NAD CZYM SIĘ MĘCZYŁEM PRZEZ OK 2H TO ZAKOMENTUJ TE TRZY LINIJKI...
-            block.position.x = poz.x
-            block.position.y = poz.y
-            block.position.z = poz.z
+            block.position.x = position.x
+            block.position.y = position.y
+            block.position.z = position.z
 
-
-            /*block.rotation.x = direct.x
-            block.rotation.y = direct.y
-            block.rotation.z = direct.z*/
-
-            // I ODKOMENTUJ TĘ, MNIEJ WIĘCEJ TO I TYM PODOBNE SPRAWIAŁY MI TRUDNOŚĆ
-            //block.position = poz
+            block.rotation.x = rotation._x
+            block.rotation.y = rotation._y
+            block.rotation.z = rotation._z
 
             i--;
         }
