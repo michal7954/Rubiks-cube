@@ -86,7 +86,6 @@ io.sockets.on("connection", function (client) {
 
     client.on("cameraChange", function (position) {
         client.broadcast.emit("cameraChange", position);
-
     })
 
 })

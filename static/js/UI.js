@@ -55,7 +55,7 @@ function Ui() {
             }
 
             game.move(input_data)
-
+            
         }
 
         else if ((e.key == "ArrowUp" || e.key == "ArrowRight") && game.animation == false) {
@@ -126,13 +126,4 @@ function Ui() {
         $(this).addClass('picked')
         row = $(this).val()
     })
-
-
-
-
-
-
-
-
-
 }
