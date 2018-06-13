@@ -2,6 +2,8 @@ var http = require("http");
 var qs = require("querystring");
 var fs = require("fs");
 var socketio = require("socket.io");
+var mongoClient = require('mongodb').MongoClient
+var ObjectID = require('mongodb').ObjectID;
 
 var server = http.createServer(function (req, res) {
 
@@ -66,9 +68,6 @@ io.sockets.on("connection", function (client) {
         io.sockets.emit("createPreview");
     }
 
-    //console.log("CON: " + client.id)
-
-
     client.emit("onconnect", {
         clientName: client.id,
         num: clients.indexOf(client)
@@ -89,4 +88,27 @@ io.sockets.on("connection", function (client) {
         client.broadcast.emit("cameraChange", position);
     })
 
+    client.on("zapisDoBazy", function (data) {
+        mongoClient.connect("mongodb://" + data.ip + "/RubikCube", function (err, db) {
+            if (err) console.log(err)
+            else {
+                _db = db;
+
+                db.createCollection("Score", function (err, coll) {
+                    coll.insert({ "nick": data.nick, "yourScore": data.time }, function (err, result) {
+                    });
+                    getColl(db, function (data) {
+                        io.sockets.emit("getcolls", data)
+                    })
+                })
+            }
+        })
+    })
+
 })
+
+var getColl = function (db, callback) {
+    db.listCollections().toArray(function (err, colls) {
+        callback(colls)
+    })
+},

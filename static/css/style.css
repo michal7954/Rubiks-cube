@@ -41,6 +41,41 @@ html, body {
     height: 24px;
 }
 
+#nickDiv {
+    display: block;
+    background-color: black;
+    opacity: 0.7;
+    z-index: 11;
+    position: relative;
+    height: 100%;
+    color: white;
+    display: none;
+}
+
+#nickAndScore {
+    position: absolute;
+    left: 42%;
+    top: 4%;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+#nickAndScore>input {
+    display: block;
+    width: 15%
+}
+
+#scoreBoard {
+    position: absolute;
+    border: solid green 2px;
+    width: 30%;
+    height: 70%;
+    margin-top: 10px;
+    padding: 0;
+    left: -8%;
+}
+
 .picked {
     background-color: red;
 }

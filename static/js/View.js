@@ -1,5 +1,11 @@
 function View(target, width, height) {
 
+    var greenWin;
+    var redWin;
+    var blueWin;
+    var yellowWin;
+    var purpleWin;
+    var lightBlueWin;
     var game = this
     var view = this
     var scene = new THREE.Scene();
@@ -135,6 +141,9 @@ function View(target, width, height) {
 
     // Ładowanie 6 różnych modeli, aby miały ten sam kolor ścian. Dodatkowo tutaj dodaje do Bloków z tablicy właśnie te modele
 
+    var positionOfStick = 52;
+    var scaleOfStick = 40;
+
     var modelX = new Model();
     modelX.loadModel("gfx/nalepka.json", function (data) {
 
@@ -147,9 +156,9 @@ function View(target, width, height) {
         for (j = -1; j < 2; j++) {
             for (k = -1; k < 2; k++) {
                 var clone = data.clone()
-                clone.scale.set(40, 40, 1)
+                clone.scale.set(scaleOfStick, scaleOfStick, 1)
                 clone.material = materialX
-                clone.position.set(55, 1, 1)
+                clone.position.set(positionOfStick, 1, 1)
                 clone.rotateY(Math.PI / 2)
                 clone.userData = { x: 1, y: j, z: k }
                 blocksOfX[j + 1][k + 1].add(clone)
@@ -168,9 +177,9 @@ function View(target, width, height) {
         for (j = -1; j < 2; j++) {
             for (k = -1; k < 2; k++) {
                 var clone = data.clone()
-                clone.scale.set(40, 40, 1)
+                clone.scale.set(scaleOfStick, scaleOfStick, 1)
                 clone.material = materialMinusX
-                clone.position.set(-55, 1, 1)
+                clone.position.set(-positionOfStick, 1, 1)
                 clone.rotateY(Math.PI / 2)
                 clone.userData = { x: -1, y: j, z: k }
                 blocksOfMinusX[j + 1][k + 1].add(clone)
@@ -189,9 +198,9 @@ function View(target, width, height) {
         for (i = -1; i < 2; i++) {
             for (k = -1; k < 2; k++) {
                 var clone = data.clone()
-                clone.scale.set(40, 40, 1)
+                clone.scale.set(scaleOfStick, scaleOfStick, 1)
                 clone.material = materialY
-                clone.position.set(1, 55, 1)
+                clone.position.set(1, positionOfStick, 1)
                 clone.rotateX(Math.PI / 2)
                 clone.userData = { x: i, y: 1, z: k }
                 blocksOfY[i + 1][k + 1].add(clone)
@@ -210,9 +219,9 @@ function View(target, width, height) {
         for (i = -1; i < 2; i++) {
             for (k = -1; k < 2; k++) {
                 var clone = data.clone()
-                clone.scale.set(40, 40, 1)
+                clone.scale.set(scaleOfStick, scaleOfStick, 1)
                 clone.material = materialMinusY
-                clone.position.set(1, -55, 1)
+                clone.position.set(1, -positionOfStick, 1)
                 clone.rotateX(Math.PI / 2)
                 clone.userData = { x: i, y: -1, z: k }
                 blocksOfMinusY[i + 1][k + 1].add(clone)
@@ -231,9 +240,9 @@ function View(target, width, height) {
         for (i = -1; i < 2; i++) {
             for (j = -1; j < 2; j++) {
                 var clone = data.clone()
-                clone.scale.set(40, 40, 1)
+                clone.scale.set(scaleOfStick, scaleOfStick, 1)
                 clone.material = materialZ
-                clone.position.set(1, 1, 55)
+                clone.position.set(1, 1, positionOfStick)
                 clone.rotateZ(Math.PI / 2)
                 clone.userData = { x: i, y: j, z: 1 }
                 blocksOfZ[i + 1][j + 1].add(clone)
@@ -252,9 +261,9 @@ function View(target, width, height) {
         for (i = -1; i < 2; i++) {
             for (j = -1; j < 2; j++) {
                 var clone = data.clone()
-                clone.scale.set(40, 40, 1)
+                clone.scale.set(scaleOfStick, scaleOfStick, 1)
                 clone.material = materialMinusZ
-                clone.position.set(1, 1, -55)
+                clone.position.set(1, 1, -positionOfStick)
                 clone.rotateZ(Math.PI / 2)
                 clone.userData = { x: i, y: j, z: -1 }
                 blocksOfMinusZ[i + 1][j + 1].add(clone)
@@ -293,15 +302,21 @@ function View(target, width, height) {
 
             scene.add(container.children[i]);
 
-            block.position.x = position.x
-            block.position.y = position.y
-            block.position.z = position.z
+            block.position.x = Math.round(position.x)
+            block.position.y = Math.round(position.y)
+            block.position.z = Math.round(position.z)
+            block.userData = {
+                x: Math.round(position.x),
+                y: Math.round(position.y),
+                z: Math.round(position.z)
+            }
 
             block.rotation.x = rotation._x
             block.rotation.y = rotation._y
             block.rotation.z = rotation._z
 
             i--;
+
         }
         container = new THREE.Object3D;
 
@@ -315,13 +330,33 @@ function View(target, width, height) {
             }
         }
         scene.add(container);
+
+        //checkWin(blocksOfMinusX)
+        //checkWin(blocksOfMinusY)
+        //checkWin(blocksOfMinusZ)
+        checkWin(blocksOfX)
+        //checkWin(blocksOfY)
+        //checkWin(blocksOfZ)
+
     }
 
     this.changeCamera = function (position) {
         camera.position.x = position.x;
         camera.position.y = position.y;
         camera.position.z = position.z;
+
         camera.lookAt(scene.position)
+    }
+
+    function checkWin(tab) {
+        //for (var i = 0; i < tab.length; i++) {
+            //for (var j = 0; j < tab.length; j++) {
+
+                console.log(tab[0][0].position, tab[0][0].userData)
+                console.log("sdasdf")
+
+           // }
+       // }
     }
 
     function frame() {

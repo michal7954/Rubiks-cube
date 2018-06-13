@@ -55,7 +55,7 @@ function Ui() {
             }
 
             game.move(input_data)
-            
+
         }
 
         else if ((e.key == "ArrowUp" || e.key == "ArrowRight") && game.animation == false) {
@@ -75,6 +75,7 @@ function Ui() {
             }
 
             game.move(input_data)
+
         }
 
         // KLAWISZE FUNKCYJNE DLA STEROWANIA
@@ -90,6 +91,22 @@ function Ui() {
             $('[value=' + parseInt(e.key - 2) + ']').addClass('picked')
             row = e.key - 2
         }
+
+        /* if (win) {
+             var ip = prompt("Jaki jest adres ip serwera mongo?", "127.0.0.1")
+             $("#nickSubmit").on("click", function () {
+                 net.client.emit("zapisDoBazy", { "ip": ip, "time": $("#timer").innerHTML, "nick": $("#nickInput").val() })
+             })
+ 
+             client.on("getcolls", function (data) {
+                 for (var i = 0; i < data.length; i++) {
+                     var playerScore = $("<p>")
+                     playerScore.innerHTML = i + ". " + data.nick + ": " + data.yourScore
+                     $("#scoreBoard").append(playerScore)
+                 }
+             })
+         }
+ */
     });
 
     function timer() {
