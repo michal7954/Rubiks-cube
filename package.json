@@ -10,6 +10,7 @@
   "author": "Madeja&Lesiak",
   "license": "ISC",
   "dependencies": {
+    "mongodb": "^2.2.35",
     "socket.io": "^1.7.3"
   },
   "devDependencies": {},

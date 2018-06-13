@@ -1,4 +1,4 @@
-var http = require("http");
+﻿var http = require("http");
 var qs = require("querystring");
 var fs = require("fs");
 var socketio = require("socket.io");
@@ -111,4 +111,4 @@ var getColl = function (db, callback) {
     db.listCollections().toArray(function (err, colls) {
         callback(colls)
     })
-},
+}
