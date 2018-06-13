@@ -11,7 +11,6 @@ function View(target, width, height) {
     );
 
     var renderer = new THREE.WebGLRenderer();
-    //renderer.setClearColor(0x808080);
     renderer.setClearColor(0x000);
     renderer.setSize(width, height);
     renderer.shadowMap.enabled = true
@@ -46,7 +45,6 @@ function View(target, width, height) {
         }
     }
 
-
     //Tablice dla odpowiednich ścian kostki, aby każda ściana miała identyczny a zarazem różny kolor
 
     var blocksOfX = []
@@ -80,15 +78,6 @@ function View(target, width, height) {
     //DODANIE MESHY
 
     var geometry = new THREE.BoxGeometry(100, 100, 100);
-    var geometry2 = new THREE.BoxGeometry(101, 101, 101);
-
-    /*
-    var material = new THREE.MeshBasicMaterial({
-        side: THREE.DoubleSide,
-        wireframe: false,
-        color: 0x000
-    });
-    */
 
     var material = new THREE.MeshPhongMaterial({
         color: 0x000000,
@@ -96,20 +85,6 @@ function View(target, width, height) {
         shininess: 24,
         side: THREE.DoubleSide,
     })
-
-    var material2 = new THREE.MeshBasicMaterial({
-        color: 0xffffff,
-        side: THREE.DoubleSide,
-        wireframe: true,
-    });
-
-    /*
-    var materialModel = new THREE.MeshBasicMaterial({
-        side: THREE.DoubleSide,
-        wireframe: false,
-        color: 0xff0000
-    });
-    */
 
     //
     // Oś X == i
@@ -127,9 +102,6 @@ function View(target, width, height) {
                 cube.castShadow = true
                 cube.receiveShadow = true
                 block.add(cube);
-
-                var cube2 = new THREE.Mesh(geometry2, material2);
-                //block.add(cube2);
 
                 block.position.set(i * 110, j * 110, k * 110)
                 block.userData = { x: i, y: j, z: k }
@@ -313,7 +285,7 @@ function View(target, width, height) {
         frame_num = data.duration
         view.animation = true;
 
-        // WYPRÓŻNIANIE KONTENERA I AKTUALIZOWANIE POZYCJI ORAZ ROTACJI BLOKÓW
+        // CZYSZCZENIE KONTENERA I AKTUALIZOWANIE POZYCJI ORAZ ROTACJI BLOKÓW
         for (i = 0; i < container.children.length; i++) {
 
             block = container.children[i]
