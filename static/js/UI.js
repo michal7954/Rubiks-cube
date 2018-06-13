@@ -38,7 +38,7 @@ function Ui() {
 
         //STRZAŁKI
 
-        if ((e.key == "ArrowLeft" || e.key == "ArrowDown") && game.animation == false) {
+        else if ((e.key == "ArrowLeft" || e.key == "ArrowDown") && game.animation == false) {
 
             if (isTimerTickTock == false) {
                 timer();
@@ -58,7 +58,7 @@ function Ui() {
 
         }
 
-        if ((e.key == "ArrowUp" || e.key == "ArrowRight") && game.animation == false) {
+        else if ((e.key == "ArrowUp" || e.key == "ArrowRight") && game.animation == false) {
 
             if (isTimerTickTock == false) {
                 timer();
@@ -77,6 +77,19 @@ function Ui() {
             game.move(input_data)
         }
 
+        // KLAWISZE FUNKCYJNE DLA STEROWANIA
+
+        else if (e.key == 'x' || e.key == 'y' || e.key == 'z') {
+            $('.axis.picked').removeClass('picked')
+            $('[value=' + e.key + ']').addClass('picked')
+            axis = e.key
+        }
+
+        else if (e.key == '1' || e.key == '2' || e.key == '3') {
+            $('.row.picked').removeClass('picked')
+            $('[value=' + parseInt(e.key - 2) + ']').addClass('picked')
+            row = e.key - 2
+        }
     });
 
     function timer() {
@@ -105,7 +118,6 @@ function Ui() {
         $('.axis.picked').removeClass('picked')
         $(this).addClass('picked')
         axis = $(this).val()
-        console.log(axis)
     })
 
     var row = -1
@@ -113,7 +125,6 @@ function Ui() {
         $('.row.picked').removeClass('picked')
         $(this).addClass('picked')
         row = $(this).val()
-        console.log(row)
     })
 
 
