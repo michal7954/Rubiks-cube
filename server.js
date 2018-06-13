@@ -26,7 +26,6 @@ var server = http.createServer(function (req, res) {
     ];
 
     if (req.method == "GET") {
-        console.log(req.url)
         if (files.includes(req.url)) {
             getFile(req, res);
         }

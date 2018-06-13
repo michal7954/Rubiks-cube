@@ -4,7 +4,7 @@ function Ui() {
     var isTimerTickTock = false
     $("#timer")[0].innerHTML = "00:00:00";
 
-    $(document).keypress(function (e) {
+    $(document).keydown(function (e) {
         if (e.key == "Enter" && game.animation == false) {
 
             if (isTimerTickTock == false) {
