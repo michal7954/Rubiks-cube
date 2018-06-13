@@ -12,6 +12,7 @@ var server = http.createServer(function (req, res) {
         '/libs/jquery.js',
         '/libs/three.js',
         '/libs/OrbitControls.js',
+        '/js/SpotLight.js',
         '/js/Model.js',
         '/js/View.js',
         '/js/Net.js',

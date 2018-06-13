@@ -11,11 +11,14 @@ function View(target, width, height) {
     );
 
     var renderer = new THREE.WebGLRenderer();
-    renderer.setClearColor(0x808080);
+    //renderer.setClearColor(0x808080);
+    renderer.setClearColor(0x000);
     renderer.setSize(width, height);
+    renderer.shadowMap.enabled = true
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     $(target).append(renderer.domElement);
 
-    var axes = new THREE.AxesHelper(1000);
+    var axes = new THREE.AxesHelper(4000);
     axes.position.set(-161, -161, -161)
     scene.add(axes);
 
@@ -29,6 +32,18 @@ function View(target, width, height) {
             if (net.playerNum != -1)
                 net.client.emit("cameraChange", camera.position);
         });
+    }
+
+    //LIGHTS
+    for (i = -1; i < 2; i = i + 2) {
+        for (j = -1; j < 2; j = j + 2) {
+            for (k = -1; k < 2; k = k + 2) {
+                var light = new SpotLight();
+                light.position.set(i * 600, j * 600, k * 600);
+                light.lookAt(scene.position);
+                scene.add(light);
+            }
+        }
     }
 
 
@@ -61,11 +76,26 @@ function View(target, width, height) {
         blocksOfMinusZ[a] = []
     }
 
-    //
 
     //DODANIE MESHY
 
     var geometry = new THREE.BoxGeometry(100, 100, 100);
+    var geometry2 = new THREE.BoxGeometry(101, 101, 101);
+
+    /*
+    var material = new THREE.MeshBasicMaterial({
+        side: THREE.DoubleSide,
+        wireframe: false,
+        color: 0x000
+    });
+    */
+
+    var material = new THREE.MeshPhongMaterial({
+        color: 0x000000,
+        specular: 0xFFD700,
+        shininess: 24,
+        side: THREE.DoubleSide,
+    })
 
     var material2 = new THREE.MeshBasicMaterial({
         color: 0xffffff,
@@ -73,12 +103,13 @@ function View(target, width, height) {
         wireframe: true,
     });
 
+    /*
     var materialModel = new THREE.MeshBasicMaterial({
         side: THREE.DoubleSide,
         wireframe: false,
         color: 0xff0000
     });
-
+    */
 
     //
     // Oś X == i
@@ -92,18 +123,13 @@ function View(target, width, height) {
 
                 var block = new THREE.Object3D;
 
-                var material = new THREE.MeshBasicMaterial({
-                    side: THREE.DoubleSide,
-                    wireframe: false,
-                    color: 0x000
-                });
-
-
                 var cube = new THREE.Mesh(geometry, material);
+                cube.castShadow = true
+                cube.receiveShadow = true
                 block.add(cube);
 
-                var cube2 = new THREE.Mesh(geometry, material2);
-                block.add(cube2);
+                var cube2 = new THREE.Mesh(geometry2, material2);
+                //block.add(cube2);
 
                 block.position.set(i * 110, j * 110, k * 110)
                 block.userData = { x: i, y: j, z: k }
@@ -127,6 +153,9 @@ function View(target, width, height) {
                 if (k == 1) {
                     blocksOfZ[i + 1][j + 1] = block
                 }
+
+
+
             }
         }
     }
@@ -225,7 +254,7 @@ function View(target, width, height) {
         var materialZ = new THREE.MeshBasicMaterial({
             side: THREE.DoubleSide,
             wireframe: false,
-            color: 0xffff00
+            color: 0xffaa00
         });
 
         for (i = -1; i < 2; i++) {

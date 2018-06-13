@@ -4,6 +4,7 @@ html, body {
     margin: 0;
     overflow: hidden;
     position: relative;
+    background-color: black;
 }
 
 #root {
@@ -25,6 +26,7 @@ html, body {
     height: 35%;
     font-size: 60px;
     color: white;
+    color: #51bfff;
 }
 
 #info {
