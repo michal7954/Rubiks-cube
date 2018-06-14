@@ -88,6 +88,7 @@ io.sockets.on("connection", function (client) {
     })
 
     client.on("zapisDoBazy", function (data) {
+        console.log(data)
         mongoClient.connect("mongodb://localhost/RubikCube", function (err, db) {
             if (err) console.log(err)
             else {
@@ -96,17 +97,18 @@ io.sockets.on("connection", function (client) {
                 db.createCollection("Score", function (err, coll) {
                     coll.insert({ "nick": data.nick, "yourScore": data.time }, function (err, result) {
                     });
-                    getColl(db, function (data) {
+                    getColl(coll, function (data) {
                         io.sockets.emit("getcolls", data)
                     })
+
                 })
             }
         })
     })
 })
 
-var getColl = function (db, callback) {
-    db.listCollections().toArray(function (err, colls) {
-        callback(colls)
+var getColl = function (coll, callback) {
+    coll.find({}).toArray(function (err, items) {
+        callback(items)
     })
 }
