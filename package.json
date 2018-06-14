@@ -1,0 +1,31 @@
+{
+  "name": "rubiks-cube",
+  "version": "1.0.0",
+  "description": "Aplikacje serwerowe - projekt końcoworoczny",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Madeja&Lesiak",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^2.2.35",
+    "socket.io": "^1.7.3"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michal7954/Rubiks-cube.git"
+  },
+  "keywords": [
+    "three.js",
+    "MongoDB",
+    "socket.io",
+    "jquery"
+  ],
+  "bugs": {
+    "url": "https://github.com/michal7954/Rubiks-cube/issues"
+  },
+  "homepage": "https://github.com/michal7954/Rubiks-cube#readme"
+}

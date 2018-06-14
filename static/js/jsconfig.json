@@ -1,0 +1,11 @@
+{
+  "typeAcquisition": {
+    "include": [
+      "jquery",
+      "three",
+      "socket",
+      "socket.io",
+      "OrbitControls"
+    ]
+  }
+}
