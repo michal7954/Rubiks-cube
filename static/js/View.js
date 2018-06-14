@@ -377,9 +377,6 @@ function View(target, width, height) {
             frame_num--;
         }
         else {
-
-
-
             // CZYSZCZENIE KONTENERA I AKTUALIZOWANIE POZYCJI ORAZ ROTACJI BLOKÓW
             for (i = 0; i < container.children.length; i++) {
 
@@ -417,7 +414,7 @@ function View(target, width, height) {
                     })
                 }
             }
-
+            view.animation = false;
         }
     }
 
