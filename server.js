@@ -87,28 +87,20 @@ io.sockets.on("connection", function (client) {
         client.broadcast.emit("cameraChange", position);
     })
 
-    /*
-    client.on("zapisDoBazy", function (data) {
-        console.log(data)  
-    })
-    */
-
     client.on('cubeSolved', function (input) {
-
-        // SCHEMAT: input={id, time, nick}
 
         mongoClient.connect("mongodb://localhost/RubikCube", function (err, db) {
             if (err) console.log(err)
             else {
                 _db = db;
                 db.createCollection("Score", function (err, coll) {
-                    coll.insert({ "nick": data.nick, "yourScore": data.time }, function (err, result) {
+                    coll.insert({ "nick": input.nick, "yourScore": input.time }, function (err, result) {
                         getColl(coll, function (data) {
                             output = {
                                 coll: data,
                                 id: input.id
                             }
-                            io.sockets.emit("cubeSolved", output)
+                            io.sockets.emit("win", output)
                         })
                     });
                 })

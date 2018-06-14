@@ -2,6 +2,7 @@ function Net() {
 
     this.client = io();
     this.playerNum
+    this.playerNick
     var net = this
 
     this.client.on("onconnect", function (data) {
@@ -31,14 +32,23 @@ function Net() {
         }
     })
 
-    this.client.on('cubeSolved', function (input) {
+    this.client.on('win', function (input) {
         ui.active = false;
         if (net.client.id == input.id) {
-            //wygrana
+            $("#winOrLose").text("Wygrana")
         }
         else {
-            //przegrana
+            $("#winOrLose").text("Przegrana")
         }
-        //w tym miejscu pojawia się tabela z wynikami
+
+        $("#scoreBoard").empty()
+        for (var i = 0; i < input.coll.length; i++) {
+            $("#scoreBoard").empty()
+            var playerScore = $("<p>")
+            playerScore[0].innerHTML = i + ". " + input.coll[i].nick + ": " + input.coll[i].yourScore
+            $("#scoreBoard").append(playerScore)
+        }
+        $("#inputsForSendScore").empty()
     })
+
 }

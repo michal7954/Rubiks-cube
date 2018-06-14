@@ -69,18 +69,19 @@ table td {
     display: block;
 }
 
-#nickAndScore>input {
-    display: block;
-    width: 15%
+#winOrLose {
+    margin-top: 5px;
+    font-size: 80px;
+    color: white;
 }
 
 #scoreBoard {
     position: absolute;
     border: solid green 2px;
     width: 45%;
-    height: 70%;
-    margin-top: 10px;
-    left: -10%;
+    height: 75%;
+    margin-top: 15px;
+    left: -8%;
     overflow-y: scroll;
     overflow-x: hidden;
 }

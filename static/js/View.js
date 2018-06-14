@@ -168,8 +168,6 @@ function View(target, width, height) {
                 iter++
             }
         }
-
-        console.log(redModels)
     })
 
     var modelMinusX = new Model();
@@ -194,8 +192,6 @@ function View(target, width, height) {
                 iter++
             }
         }
-
-        console.log(greenModels)
     })
 
     var modelY = new Model();
@@ -220,8 +216,6 @@ function View(target, width, height) {
                 iter++
             }
         }
-
-        console.log(blueModels)
     })
 
     var modelMinusY = new Model();
@@ -246,8 +240,6 @@ function View(target, width, height) {
                 iter++
             }
         }
-
-        console.log(lightBlueModels)
     })
 
     var modelZ = new Model();
@@ -272,8 +264,6 @@ function View(target, width, height) {
                 iter++
             }
         }
-
-        console.log(orangeModels)
     })
 
     var modelMinusZ = new Model();
@@ -298,8 +288,6 @@ function View(target, width, height) {
                 iter++
             }
         }
-
-        console.log(purpleModels)
     })
 
     // ZMIENNE DLA ANIMACJI
@@ -401,54 +389,25 @@ function View(target, width, height) {
             }
             scene.remove(container);
 
-            if (checkWin()[0]) {
-                $("#nickDiv").css("display", "block")
-                //clearInterval(ui.timerInt)
-                console.log(ui.timerInterval)
-                $("#nickSubmit").on("click", function () {
-                    $("#scoreBoard").empty()
-                    net.client.emit("zapisDoBazy", { "time": $("#timer")[0].innerHTML, "nick": $("#nickInput").val() })
-                })
-
-                net.client.on("getcolls", function (data) {
-                    for (var i = 0; i < data.length; i++) {
-                        var playerScore = $("<p>")
-                        playerScore[0].innerHTML = i + ". " + data[i].nick + ": " + data[i].yourScore
-                        $("#scoreBoard").append(playerScore)
-                    }
-                    $("#inputsForSendScore").empty()
-                })
-            }
-<<<<<<< HEAD
-=======
-
-            //if (checkWin()) {
-            $("#nickDiv").css("display", "block")
-            // clearInterval(ui.timerInterval)
-            $("#nickSubmit").on("click", function () {
-                console.log("click")
-                $("#scoreBoard").empty()
-                net.client.emit("zapisDoBazy", { "time": $("#timer")[0].innerHTML, "nick": $("#nickInput").val() })
-            })
-
-            net.client.on("getcolls", function (data) {
-                console.log(data)
-                for (var i = 0; i < data.length; i++) {
-                    var playerScore = $("<p>")
-                    playerScore[0].innerHTML = i + ". " + data[i].nick + ": " + data[i].yourScore
-                    $("#scoreBoard").append(playerScore)
+            if (data.enter) { } else {
+                if (checkWin()[0]) {
+                    ui.getTimerInterval()
+                    ui.active = false
+                    $("#nickDiv").css("display", "block")
+                    $("#nickSubmit").on("click", function () {
+                        input = {
+                            id: net.client.id,
+                            time: $("#timer")[0].innerHTML,
+                            nick: $("#nickInput").val()
+                        }
+                        net.client.emit("cubeSolved", input)
+                    })
                 }
-                $("#inputsForSendScore").empty()
-            })
-            // }*/
+            }
 
-
-            //----------------  !!!  AKTUALIZACJA STANÓW !!!
-            //$('#you').text(dobre_z_game / wszystkie ?? 26)
-            //$('#opponent').text(dobre_z_gamepreview / wszystkie ?? 26)
->>>>>>> 28920a43508fb16ffe1250fcbb4c850985949a26
         }
     }
+
     function checkWin() {
         red = true
         green = true
@@ -528,7 +487,6 @@ function View(target, width, height) {
 
         var tab = [wygrana, good];
         return tab;
-        // }
     }
     function render() {
         if (view.animation) frame()

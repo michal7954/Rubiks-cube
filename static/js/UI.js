@@ -2,10 +2,10 @@ function Ui() {
 
     var i = 0
     var ui = this
-    this.timerInterval;
     this.active = false
     var O = ['x', 'y', 'z']
     var isTimerTickTock = false
+    var timerInterval;
 
     $(document).keydown(function (e) {
         if (ui.active) {
@@ -16,6 +16,7 @@ function Ui() {
                     axis: O[Math.floor(Math.random() * 3)],
                     row: Math.floor(Math.random() * 3) - 1,
                     duration: 15,
+                    enter: true
                 }
 
                 game.move(input_data)
@@ -25,10 +26,10 @@ function Ui() {
 
             //STRZAŁKI
 
-            else if ((e.key == "ArrowLeft" || e.key == "ArrowDown") && game.animation == false) {
+            if ((e.key == "ArrowLeft" || e.key == "ArrowDown") && game.animation == false) {
 
                 if (isTimerTickTock == false) {
-                    timer();
+                    timer()
                 }
 
                 var input_data = {
@@ -48,7 +49,7 @@ function Ui() {
             else if ((e.key == "ArrowUp" || e.key == "ArrowRight") && game.animation == false) {
 
                 if (isTimerTickTock == false) {
-                    timer();
+                    timer()
                 }
 
                 var input_data = {
@@ -119,6 +120,7 @@ function Ui() {
     function timer() {
         var timeAtStartPoint = new Date().getTime()
         isTimerTickTock = true;
+
         timerInterval = setInterval(function () {
             var timeInTimer = new Date().getTime();
             var timeLeft = timeInTimer - timeAtStartPoint;
@@ -147,6 +149,7 @@ function Ui() {
         }, 1)
     }
 
-
-
+    this.getTimerInterval = function () {
+        clearInterval(timerInterval)
+    }
 }
