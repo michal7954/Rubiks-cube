@@ -419,34 +419,6 @@ function View(target, width, height) {
                     $("#inputsForSendScore").empty()
                 })
             }
-<<<<<<< HEAD
-=======
-
-            //if (checkWin()) {
-            $("#nickDiv").css("display", "block")
-            // clearInterval(ui.timerInterval)
-            $("#nickSubmit").on("click", function () {
-                console.log("click")
-                $("#scoreBoard").empty()
-                net.client.emit("zapisDoBazy", { "time": $("#timer")[0].innerHTML, "nick": $("#nickInput").val() })
-            })
-
-            net.client.on("getcolls", function (data) {
-                console.log(data)
-                for (var i = 0; i < data.length; i++) {
-                    var playerScore = $("<p>")
-                    playerScore[0].innerHTML = i + ". " + data[i].nick + ": " + data[i].yourScore
-                    $("#scoreBoard").append(playerScore)
-                }
-                $("#inputsForSendScore").empty()
-            })
-            // }*/
-
-
-            //----------------  !!!  AKTUALIZACJA STANÓW !!!
-            //$('#you').text(dobre_z_game / wszystkie ?? 26)
-            //$('#opponent').text(dobre_z_gamepreview / wszystkie ?? 26)
->>>>>>> 28920a43508fb16ffe1250fcbb4c850985949a26
         }
     }
     function checkWin() {
