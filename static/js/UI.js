@@ -15,8 +15,8 @@ function Ui() {
                     direction: Math.floor(Math.random() * 2),
                     axis: O[Math.floor(Math.random() * 3)],
                     row: Math.floor(Math.random() * 3) - 1,
-                    duration: 15,
-                    enter: true
+                    enter: true,
+                    duration: 30
                 }
 
                 game.move(input_data)
@@ -36,7 +36,7 @@ function Ui() {
                     direction: 0,
                     axis: axis,
                     row: row,
-                    duration: 15,
+                    duration: 30,
                 }
                 if (axis == 'x') {
                     input_data.direction = 1;
@@ -56,7 +56,7 @@ function Ui() {
                     direction: 1,
                     axis: axis,
                     row: row,
-                    duration: 15,
+                    duration: 30,
                 }
                 if (axis == 'x') {
                     input_data.direction = 0;
@@ -93,29 +93,47 @@ function Ui() {
                 row = e.key - 2
             }
         }
-
-
     });
 
     //BUTTONY
     var axis = 'x'
     $('.axis').on('click', function () {
-        if (ui.active) {
-            $('.axis.picked').removeClass('picked')
-            $(this).addClass('picked')
-            axis = $(this).val()
-        }
-
+        $('.axis.picked').removeClass('picked')
+        $(this).addClass('picked')
+        axis = $(this).val()
     })
 
     var row = -1
     $('.row').on('click', function () {
-        if (ui.active) {
-            $('.row.picked').removeClass('picked')
-            $(this).addClass('picked')
-            row = $(this).val()
-        }
+        $('.row.picked').removeClass('picked')
+        $(this).addClass('picked')
+        row = $(this).val()
     })
+
+    //RAYCASTER
+    var mousedown = false;
+    $(document)
+        .mousedown(function (e) {
+            if (ui.active && e.which == 1) {
+                mousedown = true
+                game.casting(e);
+            }
+        })
+        .mousemove(function (e) {
+            if (ui.active && e.which == 1 && mousedown) {
+                game.casting(e);
+            }
+        })
+        .mouseup(function (e) {
+            if (ui.active && e.which == 1) {
+                mousedown = false
+                game.calculate();
+                if (isTimerTickTock == false) {
+                    timer();
+                }
+            }
+        })
+
 
     function timer() {
         var timeAtStartPoint = new Date().getTime()

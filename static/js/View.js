@@ -1,6 +1,5 @@
 function View(target, width, height) {
 
-    var game = this
     var view = this
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(
@@ -10,8 +9,17 @@ function View(target, width, height) {
         10000
     );
 
-    var renderer = new THREE.WebGLRenderer();
-    renderer.setClearColor(0x000);
+    if (target == 'body') {
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setClearColor(0x000000);
+    }
+
+    else {
+        var renderer = new THREE.WebGLRenderer({ alpha: true });
+        renderer.setClearColor(0x000000, 0);
+    }
+
+
     renderer.setSize(width, height);
     renderer.shadowMap.enabled = true
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -19,7 +27,7 @@ function View(target, width, height) {
 
     var axes = new THREE.AxesHelper(4000);
     axes.position.set(-161, -161, -161)
-    scene.add(axes);
+    //scene.add(axes);
 
     camera.position.set(600, 600, 600);
     camera.lookAt(scene.position);
@@ -84,24 +92,27 @@ function View(target, width, height) {
 
     //DODANIE MESHY
 
-    var geometry = new THREE.BoxGeometry(100, 100, 100);
 
-    var material = new THREE.MeshPhongMaterial({
-        color: 0x000000,
-        specular: 0xFFD700,
-        shininess: 24,
-        side: THREE.DoubleSide,
-    })
+
 
     //
     // Oś X == i
     // Oś Y == j
     // Oś Z == k
     //
+    var cubes = [];
 
     for (i = -1; i < 2; i++) {
         for (j = -1; j < 2; j++) {
             for (k = -1; k < 2; k++) {
+
+                var geometry = new THREE.BoxGeometry(100, 100, 100);
+                var material = new THREE.MeshPhongMaterial({
+                    color: 0x000000,
+                    specular: 0xFFD700,
+                    shininess: 18,
+                    side: THREE.DoubleSide,
+                })
 
                 var block = new THREE.Object3D;
 
@@ -109,10 +120,12 @@ function View(target, width, height) {
                 cube.castShadow = true
                 cube.receiveShadow = true
                 block.add(cube);
+                cubes.push(cube)
 
                 block.position.set(i * 110, j * 110, k * 110)
                 block.userData = { x: i, y: j, z: k }
                 scene.add(block);
+
 
                 if (i == -1) {
                     blocksOfMinusX[j + 1][k + 1] = block
@@ -290,8 +303,8 @@ function View(target, width, height) {
         }
     })
 
-    // ZMIENNE DLA ANIMACJI
 
+    // ZMIENNE DLA ANIMACJI
     var container = new THREE.Object3D;
     var frame_num = 0;
     this.animation = false;
@@ -360,12 +373,12 @@ function View(target, width, height) {
 
         }
         //chwila spoczynku między animacjami
-        else if (frame_num <= 0 && frame_num > -6) {
+        else if (frame_num <= 0 && frame_num > -4) {
             frame_num--;
         }
         else {
 
-            view.animation = false;
+
 
             // CZYSZCZENIE KONTENERA I AKTUALIZOWANIE POZYCJI ORAZ ROTACJI BLOKÓW
             for (i = 0; i < container.children.length; i++) {
@@ -488,6 +501,145 @@ function View(target, width, height) {
         var tab = [wygrana, good];
         return tab;
     }
+
+
+    //-------------- RAYCASTER
+    //-------------- !!! "NIE PYTAJ MNIE, WIEM TYLE CO I TY" !!!--------------------------//
+
+    var raycaster = new THREE.Raycaster();
+    var mouseVector = new THREE.Vector2();
+    var over = [];
+
+    this.casting = function (e) {
+
+        mouseVector.x = (e.clientX / $(window).width()) * 2 - 1;
+        mouseVector.y = -(e.clientY / $(window).height()) * 2 + 1;
+
+        raycaster.setFromCamera(mouseVector, camera);
+        var intersects = raycaster.intersectObjects(cubes);
+
+        if (intersects.length > 0) {
+            if (!over.includes(intersects[0].object.parent)) {
+                over.push(intersects[0].object.parent)
+            }
+        }
+    }
+
+    this.calculate = function () {
+        if (!view.animation) {
+
+            pos = []
+            var obj1 = over[0].position
+            if (over[1])
+                var obj2 = over[1].position
+            obj3 = over[over.length - 1].position
+            war = {
+                x: true,
+                y: true,
+                z: true,
+            }
+
+            for (i = 0; i < over.length; i++) {
+                pos[i] = over[i].position
+                if (over[i].position.x != obj1.x) {
+                    war.x = false
+                }
+                if (over[i].position.y != obj1.y) {
+                    war.y = false
+                }
+                if (over[i].position.z != obj1.z) {
+                    war.z = false
+                }
+            }
+
+            if (war.x + war.y + war.z == 1) {
+
+                if (war.x) {
+                    var data = {
+                        axis: 'x',
+                        row: over[0].position.x / 110,
+                        duration: 30
+                    }
+                    var p1 = {
+                        x: obj1.z,
+                        y: obj1.y
+                    }
+                    var p2 = {
+                        x: obj2.z,
+                        y: obj2.y
+                    }
+                    var alfa = Math.atan2(p1.y, p1.x)
+                    var beta = Math.atan2(p2.y, p2.x)
+                    var gamma = beta - alfa;
+                    angle = gamma * 180 / Math.PI
+
+                    if (angle == 45 || angle == -315)
+                        data.direction = 0
+                    else if (angle == -45 || angle == 315)
+                        data.direction = 1
+
+                    view.move(data)
+                }
+
+                else if (war.y) {
+                    var data = {
+                        axis: 'y',
+                        row: over[0].position.y / 110,
+                        duration: 30
+                    }
+                    var p1 = {
+                        x: obj1.x,
+                        y: obj1.z
+                    }
+                    var p2 = {
+                        x: obj2.x,
+                        y: obj2.z
+                    }
+                    var alfa = Math.atan2(p1.y, p1.x)
+                    var beta = Math.atan2(p2.y, p2.x)
+                    var gamma = beta - alfa;
+                    angle = gamma * 180 / Math.PI
+
+                    if (angle == 45 || angle == -315)
+                        data.direction = 0
+                    else if (angle == -45 || angle == 315)
+                        data.direction = 1
+
+                    view.move(data)
+                }
+
+                else if (war.z) {
+
+                    var data = {
+                        axis: 'z',
+                        row: over[0].position.z / 110,
+                        duration: 30
+                    }
+                    var p1 = {
+                        x: obj1.x,
+                        y: obj1.y
+                    }
+                    var p2 = {
+                        x: obj2.x,
+                        y: obj2.y
+                    }
+                    var alfa = Math.atan2(p1.y, p1.x)
+                    var beta = Math.atan2(p2.y, p2.x)
+                    var gamma = beta - alfa;
+                    angle = gamma * 180 / Math.PI
+
+                    if (angle == 45 || angle == -315)
+                        data.direction = 1
+                    else if (angle == -45 || angle == 315)
+                        data.direction = 0
+
+                    view.move(data)
+                }
+            }
+        }
+        over = []
+    }
+
     function render() {
         if (view.animation) frame()
         renderer.render(scene, camera);
