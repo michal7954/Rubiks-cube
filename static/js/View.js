@@ -1,11 +1,5 @@
 function View(target, width, height) {
 
-    var greenWin;
-    var redWin;
-    var blueWin;
-    var yellowWin;
-    var purpleWin;
-    var lightBlueWin;
     var game = this
     var view = this
     var scene = new THREE.Scene();
@@ -40,7 +34,7 @@ function View(target, width, height) {
     }
 
     //LIGHTS
-    for (i = -1; i < 2; i = i + 2) {
+    /*for (i = -1; i < 2; i = i + 2) {
         for (j = -1; j < 2; j = j + 2) {
             for (k = -1; k < 2; k = k + 2) {
                 var light = new SpotLight();
@@ -49,7 +43,7 @@ function View(target, width, height) {
                 scene.add(light);
             }
         }
-    }
+    }*/
 
     //Tablice dla odpowiednich ścian kostki, aby każda ściana miała identyczny a zarazem różny kolor
 
@@ -131,9 +125,6 @@ function View(target, width, height) {
                 if (k == 1) {
                     blocksOfZ[i + 1][j + 1] = block
                 }
-
-
-
             }
         }
     }
@@ -295,7 +286,7 @@ function View(target, width, height) {
         view.animation = true;
 
         // CZYSZCZENIE KONTENERA I AKTUALIZOWANIE POZYCJI ORAZ ROTACJI BLOKÓW
-        for (i = 0; i < container.children.length; i++) {
+        /*for (i = 0; i < container.children.length; i++) {
 
             block = container.children[i]
             position = block.getWorldPosition()
@@ -318,7 +309,7 @@ function View(target, width, height) {
 
             i--;
 
-        }
+        }*/
         container = new THREE.Object3D;
 
         // DYNAMICZNE PUSHOWANIE RZĘDU DO KONTENERA
@@ -349,17 +340,6 @@ function View(target, width, height) {
         camera.lookAt(scene.position)
     }
 
-    function checkWin(tab) {
-        //for (var i = 0; i < tab.length; i++) {
-            //for (var j = 0; j < tab.length; j++) {
-
-                console.log(tab[0][0].position, tab[0][0].userData)
-                console.log("sdasdf")
-
-           // }
-       // }
-    }
-
     function frame() {
         if (frame_num > 0) {
 
@@ -386,6 +366,21 @@ function View(target, width, height) {
         }
         else {
             view.animation = false;
+        }
+    }
+
+
+    function checkWin(tab) {
+        for (var i = 1; i < tab.length; i++) {
+            if (tab[i].userData.x * 110 == tab[i].position.x) {
+                if (tab[i].userData.y * 110 == tab[i].position.y) {
+                    if (tab[i].userData.z * 110 == tab[i].position.z) {
+                        return true;
+                    }
+                }
+            } else {
+                return false
+            }
         }
     }
 
