@@ -83,7 +83,7 @@ function Ui() {
     function timer() {
         var timeAtStartPoint = new Date().getTime()
         isTimerTickTock = true;
-        this.timerInterval = setInterval(function () {
+        timerInterval = setInterval(function () {
             var timeInTimer = new Date().getTime();
             var timeLeft = timeInTimer - timeAtStartPoint;
             var secs = Math.floor((timeLeft % (60 * 1000)) / 1000)
