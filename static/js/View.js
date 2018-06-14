@@ -297,15 +297,6 @@ function View(target, width, height) {
             }
         }
         scene.add(container);
-
-
-        //checkWin(blocksOfMinusX)
-        //checkWin(blocksOfMinusY)
-        //checkWin(blocksOfMinusZ)
-        checkWin(blocksOfX)
-        //checkWin(blocksOfY)
-        //checkWin(blocksOfZ)
-
     }
 
     this.changeCamera = function (position) {
@@ -352,6 +343,9 @@ function View(target, width, height) {
 
                 scene.add(container.children[i]);
 
+                //console.log("Bloczek: ")
+                //console.log(block)
+
                 block.position.x = Math.round(position.x)
                 block.position.y = Math.round(position.y)
                 block.position.z = Math.round(position.z)
@@ -370,36 +364,55 @@ function View(target, width, height) {
             }
             scene.remove(container);
 
-            /*if (checkWin()) {
-              //  $("#nickDiv").css("display", "block")
-               // clearInterval(ui.timerInterval)
-                $("#nickSubmit").on("click", function () {
-                    net.client.emit("zapisDoBazy", { "time": $("#timer").innerHTML, "nick": $("#nickInput").val() })
-                })
+            if (container.children.length == 0) {
+                console.log(container.children)
+                console.log(checkWin())
+            }
 
-                net.client.on("getcolls", function (data) {
-                    for (var i = 0; i < data.length; i++) {
-                        var playerScore = $("<p>")
-                        playerScore.innerHTML = i + ". " + data.nick + ": " + data.yourScore
-                        $("#scoreBoard").append(playerScore)
-                    }
-                })
-            }*/
+            //if (checkWin()) {
+            $("#nickDiv").css("display", "block")
+            // clearInterval(ui.timerInterval)
+            $("#nickSubmit").on("click", function () {
+                console.log("click")
+                $("#scoreBoard").empty()
+                net.client.emit("zapisDoBazy", { "time": $("#timer")[0].innerHTML, "nick": $("#nickInput").val() })
+            })
+
+            net.client.on("getcolls", function (data) {
+                console.log(data)
+                for (var i = 0; i < data.length; i++) {
+                    var playerScore = $("<p>")
+                    playerScore[0].innerHTML = i + ". " + data[i].nick + ": " + data[i].yourScore
+                    $("#scoreBoard").append(playerScore)
+                }
+                $("#inputsForSendScore").empty()
+            })
+            // }*/
         }
     }
     function checkWin() {
+        good = 0
+        wygrana = true
         for (var i = 1; i < scene.children.length; i++) {
+            console.log(container)
             console.log(scene.children.length)
-            if (scene.children[i].userData.x * 110 == scene.children[i].position.x) {
-                if (scene.children[i].userData.y * 110 == scene.children[i].position.y) {
-                    if (scene.children[i].userData.z * 110 == scene.children[i].position.z) {
-                        return true;
+            if (scene.children[i].userData.x * 110 == Math.round(scene.children[i].position.x)) {
+                if (scene.children[i].userData.y * 110 == Math.round(scene.children[i].position.y)) {
+                    if (scene.children[i].userData.z * 110 == Math.round(scene.children[i].position.z)) {
+                        good++
+                        console.log("Pozycja: " + Math.round(scene.children[i].position.x))
+                        console.log("userData: " + scene.children[i].userData.x)
+                        console.log("Blok")
+                        console.log(i)
+                        console.log("Blok")
                     }
                 }
             } else {
-                return false
+                wygrana = false
             }
         }
+        var tab = [wygrana, good];
+        return tab;
     }
 
     function render() {
