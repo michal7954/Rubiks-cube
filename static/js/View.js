@@ -399,21 +399,24 @@ function View(target, width, height) {
             }
             scene.remove(container);
 
-            if (data.enter) { } else {
-                if (checkWin()[0]) {
-                    ui.getTimerInterval()
-                    ui.active = false
-                    $("#nickDiv").css("display", "block")
-                    $("#nickSubmit").on("click", function () {
-                        input = {
-                            id: net.client.id,
-                            time: $("#timer")[0].innerHTML,
-                            nick: $("#nickInput").val()
-                        }
-                        net.client.emit("cubeSolved", input)
-                    })
+            if(target=='body'){
+                if (data.enter) { } else {
+                    if (checkWin()[0]) {
+                        ui.getTimerInterval()
+                        ui.active = false
+                        $("#nickDiv").css("display", "block")
+                        $("#nickSubmit").on("click", function () {
+                            input = {
+                                id: net.client.id,
+                                time: $("#timer")[0].innerHTML,
+                                nick: $("#nickInput").val()
+                            }
+                            net.client.emit("cubeSolved", input)
+                        })
+                    }
                 }
             }
+            
             view.animation = false;
         }
     }
