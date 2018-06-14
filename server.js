@@ -103,7 +103,6 @@ io.sockets.on("connection", function (client) {
             }
         })
     })
-
 })
 
 var getColl = function (db, callback) {

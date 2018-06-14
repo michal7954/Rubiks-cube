@@ -5,7 +5,6 @@ function Ui() {
     this.timerInterval;
     var O = ['x', 'y', 'z']
     var isTimerTickTock = false
-    $("#timer")[0].innerHTML = "00:00:00";
 
     $(document).keydown(function (e) {
         if (e.key == "Enter" && game.animation == false) {
@@ -66,7 +65,20 @@ function Ui() {
 
         // KLAWISZE FUNKCYJNE DLA STEROWANIA
 
-        else if (e.key == 'x' || e.key == 'y' || e.key == 'z') {
+        else if (e.key == 'x' || e.key == 'y' || e.key == 'z' || e.key == 'q' || e.key == 'w' || e.key == 'e') {
+
+            switch (e.key) {
+                case 'q':
+                    e.key = 'x';
+                    break;
+                case 'w':
+                    e.key = 'y';
+                    break;
+                case 'e':
+                    e.key = 'z';
+                    break;
+            }
+
             $('.axis.picked').removeClass('picked')
             $('[value=' + e.key + ']').addClass('picked')
             axis = e.key
@@ -89,9 +101,21 @@ function Ui() {
             var secs = Math.floor((timeLeft % (60 * 1000)) / 1000)
             var mins = Math.floor((timeLeft / (60 * 1000)))
             var mili = Math.floor((timeLeft % 1000))
+
+            if (mili == 0) {
+                mili = '000';
+            }
+            else if (mili < 10) {
+                mili = '00' + mili;
+            }
+            else if (mili < 100) {
+                mili = '0' + mili;
+            }
+
             if (secs < 10) {
                 secs = "0" + secs;
             }
+
             if (mins < 10) {
                 mins = "0" + mins
             }

@@ -34,16 +34,16 @@ function View(target, width, height) {
     }
 
     //LIGHTS
-    /*for (i = -1; i < 2; i = i + 2) {
+    for (i = -1; i < 2; i = i + 2) {
         for (j = -1; j < 2; j = j + 2) {
             for (k = -1; k < 2; k = k + 2) {
                 var light = new SpotLight();
                 light.position.set(i * 600, j * 600, k * 600);
                 light.lookAt(scene.position);
-                //scene.add(light);
+                scene.add(light);
             }
         }
-    }*/
+    }
 
     //Tablice dla odpowiednich ścian kostki, aby każda ściana miała identyczny a zarazem różny kolor
 
@@ -340,7 +340,12 @@ function View(target, width, height) {
             frame_num--;
 
         }
+        //chwila spoczynku między animacjami
+        else if (frame_num <= 0 && frame_num > -6) {
+            frame_num--;
+        }
         else {
+
             view.animation = false;
 
             // CZYSZCZENIE KONTENERA I AKTUALIZOWANIE POZYCJI ORAZ ROTACJI BLOKÓW
@@ -385,6 +390,11 @@ function View(target, width, height) {
                     }
                 })
             }*/
+
+
+            //----------------  !!!  AKTUALIZACJA STANÓW !!!
+            //$('#you').text(dobre_z_game / wszystkie ?? 26)
+            //$('#opponent').text(dobre_z_gamepreview / wszystkie ?? 26)
         }
     }
     function checkWin() {
