@@ -373,7 +373,7 @@ function View(target, width, height) {
 
         }
         //chwila spoczynku między animacjami
-        else if (frame_num <= 0 && frame_num > -4) {
+        else if (frame_num <= 0 && frame_num > -30) {
             frame_num--;
         }
         else {
