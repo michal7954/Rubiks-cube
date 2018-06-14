@@ -8,90 +8,90 @@ function Ui() {
     var isTimerTickTock = false
 
     $(document).keydown(function (e) {
-        if (ui.active) {
-            if (e.key == "Enter" && game.animation == false) {
+        //if (ui.active) {
+        if (e.key == "Enter" && game.animation == false) {
 
-                var input_data = {
-                    direction: Math.floor(Math.random() * 2),
-                    axis: O[Math.floor(Math.random() * 3)],
-                    row: Math.floor(Math.random() * 3) - 1,
-                    duration: 15,
-                }
-
-                game.move(input_data)
-
-                i++;
+            var input_data = {
+                direction: Math.floor(Math.random() * 2),
+                axis: O[Math.floor(Math.random() * 3)],
+                row: Math.floor(Math.random() * 3) - 1,
+                duration: 15,
             }
 
-            //STRZAŁKI
+            game.move(input_data)
 
-            else if ((e.key == "ArrowLeft" || e.key == "ArrowDown") && game.animation == false) {
-
-                if (isTimerTickTock == false) {
-                    timer();
-                }
-
-                var input_data = {
-                    direction: 0,
-                    axis: axis,
-                    row: row,
-                    duration: 15,
-                }
-                if (axis == 'x') {
-                    input_data.direction = 1;
-                }
-
-                game.move(input_data)
-
-            }
-
-            else if ((e.key == "ArrowUp" || e.key == "ArrowRight") && game.animation == false) {
-
-                if (isTimerTickTock == false) {
-                    timer();
-                }
-
-                var input_data = {
-                    direction: 1,
-                    axis: axis,
-                    row: row,
-                    duration: 15,
-                }
-                if (axis == 'x') {
-                    input_data.direction = 0;
-                }
-
-                game.move(input_data)
-
-            }
-
-            // KLAWISZE FUNKCYJNE DLA STEROWANIA
-
-            else if (e.key == 'x' || e.key == 'y' || e.key == 'z' || e.key == 'q' || e.key == 'w' || e.key == 'e') {
-
-                switch (e.key) {
-                    case 'q':
-                        e.key = 'x';
-                        break;
-                    case 'w':
-                        e.key = 'y';
-                        break;
-                    case 'e':
-                        e.key = 'z';
-                        break;
-                }
-
-                $('.axis.picked').removeClass('picked')
-                $('[value=' + e.key + ']').addClass('picked')
-                axis = e.key
-            }
-
-            else if (e.key == '1' || e.key == '2' || e.key == '3') {
-                $('.row.picked').removeClass('picked')
-                $('[value=' + parseInt(e.key - 2) + ']').addClass('picked')
-                row = e.key - 2
-            }
+            i++;
         }
+
+        //STRZAŁKI
+
+        else if ((e.key == "ArrowLeft" || e.key == "ArrowDown") && game.animation == false) {
+
+            if (isTimerTickTock == false) {
+                timer();
+            }
+
+            var input_data = {
+                direction: 0,
+                axis: axis,
+                row: row,
+                duration: 15,
+            }
+            if (axis == 'x') {
+                input_data.direction = 1;
+            }
+
+            game.move(input_data)
+
+        }
+
+        else if ((e.key == "ArrowUp" || e.key == "ArrowRight") && game.animation == false) {
+
+            if (isTimerTickTock == false) {
+                timer();
+            }
+
+            var input_data = {
+                direction: 1,
+                axis: axis,
+                row: row,
+                duration: 15,
+            }
+            if (axis == 'x') {
+                input_data.direction = 0;
+            }
+
+            game.move(input_data)
+
+        }
+
+        // KLAWISZE FUNKCYJNE DLA STEROWANIA
+
+        else if (e.key == 'x' || e.key == 'y' || e.key == 'z' || e.key == 'q' || e.key == 'w' || e.key == 'e') {
+
+            switch (e.key) {
+                case 'q':
+                    e.key = 'x';
+                    break;
+                case 'w':
+                    e.key = 'y';
+                    break;
+                case 'e':
+                    e.key = 'z';
+                    break;
+            }
+
+            $('.axis.picked').removeClass('picked')
+            $('[value=' + e.key + ']').addClass('picked')
+            axis = e.key
+        }
+
+        else if (e.key == '1' || e.key == '2' || e.key == '3') {
+            $('.row.picked').removeClass('picked')
+            $('[value=' + parseInt(e.key - 2) + ']').addClass('picked')
+            row = e.key - 2
+        }
+        //}
 
 
     });
@@ -115,6 +115,28 @@ function Ui() {
             row = $(this).val()
         }
     })
+
+    //raycaster
+    var mousedown = false;
+    $(document)
+        .mousedown(function (e) {
+            if (/*ui.active &&*/ e.which == 1) {
+                mousedown = true
+                game.casting(e);
+            }
+        })
+        .mousemove(function (e) {
+            if (/*ui.active &&*/ e.which == 1 && mousedown) {
+                game.casting(e);
+            }
+        })
+        .mouseup(function (e) {
+            if (/*ui.active &&*/ e.which == 1) {
+                mousedown = false
+                game.calculate();
+            }
+        })
+
 
     function timer() {
         var timeAtStartPoint = new Date().getTime()

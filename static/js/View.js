@@ -77,24 +77,28 @@ function View(target, width, height) {
 
     //DODANIE MESHY
 
-    var geometry = new THREE.BoxGeometry(100, 100, 100);
 
-    var material = new THREE.MeshPhongMaterial({
-        color: 0x000000,
-        specular: 0xFFD700,
-        shininess: 24,
-        side: THREE.DoubleSide,
-    })
+
 
     //
     // Oś X == i
     // Oś Y == j
     // Oś Z == k
     //
+    var cubes = [];
+
 
     for (i = -1; i < 2; i++) {
         for (j = -1; j < 2; j++) {
             for (k = -1; k < 2; k++) {
+
+                var geometry = new THREE.BoxGeometry(100, 100, 100);
+                var material = new THREE.MeshPhongMaterial({
+                    color: 0x000000,
+                    specular: 0xFFD700,
+                    shininess: 18,
+                    side: THREE.DoubleSide,
+                })
 
                 var block = new THREE.Object3D;
 
@@ -102,10 +106,12 @@ function View(target, width, height) {
                 cube.castShadow = true
                 cube.receiveShadow = true
                 block.add(cube);
+                cubes.push(cube)
 
                 block.position.set(i * 110, j * 110, k * 110)
                 block.userData = { x: i, y: j, z: k }
                 scene.add(block);
+
 
                 if (i == -1) {
                     blocksOfMinusX[j + 1][k + 1] = block
@@ -370,28 +376,29 @@ function View(target, width, height) {
             scene.remove(container);
 
             if (container.children.length == 0) {
-                console.log(container.children)
-                console.log(checkWin())
+                //console.log(container.children)
+                //console.log(checkWin())
             }
 
             //if (checkWin()) {
-            $("#nickDiv").css("display", "block")
-            // clearInterval(ui.timerInterval)
-            $("#nickSubmit").on("click", function () {
-                console.log("click")
-                $("#scoreBoard").empty()
-                net.client.emit("zapisDoBazy", { "time": $("#timer")[0].innerHTML, "nick": $("#nickInput").val() })
-            })
+            /*
+        $("#nickDiv").css("display", "block")
+        // clearInterval(ui.timerInterval)
+        $("#nickSubmit").on("click", function () {
+            console.log("click")
+            $("#scoreBoard").empty()
+            net.client.emit("zapisDoBazy", { "time": $("#timer")[0].innerHTML, "nick": $("#nickInput").val() })
+        })
 
-            net.client.on("getcolls", function (data) {
-                console.log(data)
-                for (var i = 0; i < data.length; i++) {
-                    var playerScore = $("<p>")
-                    playerScore[0].innerHTML = i + ". " + data[i].nick + ": " + data[i].yourScore
-                    $("#scoreBoard").append(playerScore)
-                }
-                $("#inputsForSendScore").empty()
-            })
+        net.client.on("getcolls", function (data) {
+            console.log(data)
+            for (var i = 0; i < data.length; i++) {
+                var playerScore = $("<p>")
+                playerScore[0].innerHTML = i + ". " + data[i].nick + ": " + data[i].yourScore
+                $("#scoreBoard").append(playerScore)
+            }
+            $("#inputsForSendScore").empty()
+        })*/
             // }*/
 
 
@@ -400,6 +407,7 @@ function View(target, width, height) {
             //$('#opponent').text(dobre_z_gamepreview / wszystkie ?? 26)
         }
     }
+    /*
     function checkWin() {
         good = 0
         wygrana = true
@@ -424,6 +432,144 @@ function View(target, width, height) {
         var tab = [wygrana, good];
         return tab;
     }
+    */
+
+    //-------------- RAYCASTER
+
+    var raycaster = new THREE.Raycaster();
+    var mouseVector = new THREE.Vector2();
+    var over = [];
+
+    this.casting = function (e) {
+
+        mouseVector.x = (e.clientX / $(window).width()) * 2 - 1;
+        mouseVector.y = -(e.clientY / $(window).height()) * 2 + 1;
+
+        raycaster.setFromCamera(mouseVector, camera);
+        var intersects = raycaster.intersectObjects(cubes);
+
+        if (intersects.length > 0) {
+            if (!over.includes(intersects[0].object.parent)) {
+                over.push(intersects[0].object.parent)
+            }
+        }
+    }
+
+    this.calculate = function () {
+        pos = []
+        //console.log(over)
+        obj1 = over[0].position
+        obj2 = over[0].position
+        obj3 = over[over.length - 1].position
+        war = {
+            x: true,
+            y: true,
+            z: true,
+        }
+
+        for (i = 0; i < over.length; i++) {
+            pos[i] = over[i].position
+            if (over[i].position.x != obj1.x) {
+                war.x = false
+            }
+            if (over[i].position.y != obj1.y) {
+                war.y = false
+            }
+            if (over[i].position.z != obj1.z) {
+                war.z = false
+            }
+
+        }
+
+
+
+        if (war.x + war.y + war.z == 1) {
+
+            var axis
+            var row
+
+            if (war.x) {
+                axis = 'x'
+                row = over[0].position.x / 110
+            }
+
+            else if (war.y) {
+
+                axis = 'y'
+                row = over[0].position.y / 110
+                /*
+                if (obj1.x < obj2.x) {
+                    if (obj1.z > obj2.z) {
+                        console.log("a")
+                    }
+                    if (obj1.z < obj2.z) {
+                        console.log("b")
+                    }
+                }
+                if (obj1.x > obj2.x) {
+                    if (obj1.z > obj2.z) {
+                        console.log("c")
+                    }
+                    if (obj1.z < obj2.z) {
+                        console.log("d")
+                    }
+                }
+                
+                p1 = {
+                    x: obj1.x,
+                    y: obj1.z
+                }
+                p2 = {
+                    x: obj2.x,
+                    y: obj2.z
+                }
+                */
+                console.log(pos)
+            }
+
+            else if (war.z) {
+                axis = 'z'
+                row = over[0].position.z / 110
+            }
+
+            //console.log(row)
+            console.log(obj1, obj2)
+
+        }
+
+        over = []
+    }
+    /*
+    function angle(p1, p2) {
+        var p1 = {
+            x: 20,
+            y: 20
+        };
+
+        var p2 = {
+            x: 40,
+            y: 40
+        };
+
+        // angle in radians
+
+        // angle in degrees
+        var angleDeg = Math.atan(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI;
+        return angleDeg
+    }
+    */
+
+    function angle(ex, ey) {
+        var cx = 0
+        var cy = 0
+        var dy = ey - cy;
+        var dx = ex - cx;
+        var theta = Math.atan2(dy, dx); // range (-PI, PI]
+        theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
+        //if (theta < 0) theta = 360 + theta; // range [0, 360)
+        return theta;
+    }
+
 
     function render() {
         if (view.animation) frame()
