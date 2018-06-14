@@ -1,6 +1,8 @@
 function Ui() {
 
     var i = 0
+    var ui = this
+    this.timerInterval;
     var O = ['x', 'y', 'z']
     var isTimerTickTock = false
     $("#timer")[0].innerHTML = "00:00:00";
@@ -76,27 +78,12 @@ function Ui() {
             row = e.key - 2
         }
 
-        /* if (win) {
-             var ip = prompt("Jaki jest adres ip serwera mongo?", "127.0.0.1")
-             $("#nickSubmit").on("click", function () {
-                 net.client.emit("zapisDoBazy", { "ip": ip, "time": $("#timer").innerHTML, "nick": $("#nickInput").val() })
-             })
- 
-             client.on("getcolls", function (data) {
-                 for (var i = 0; i < data.length; i++) {
-                     var playerScore = $("<p>")
-                     playerScore.innerHTML = i + ". " + data.nick + ": " + data.yourScore
-                     $("#scoreBoard").append(playerScore)
-                 }
-             })
-         }
- */
     });
 
     function timer() {
         var timeAtStartPoint = new Date().getTime()
         isTimerTickTock = true;
-        setInterval(function () {
+        this.timerInterval = setInterval(function () {
             var timeInTimer = new Date().getTime();
             var timeLeft = timeInTimer - timeAtStartPoint;
             var secs = Math.floor((timeLeft % (60 * 1000)) / 1000)

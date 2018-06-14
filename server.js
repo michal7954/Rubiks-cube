@@ -77,7 +77,6 @@ io.sockets.on("connection", function (client) {
         if (clients.indexOf(client) != -1) {
             clients[clients.indexOf(client)] = null;
         }
-        //console.log("DIS: " + client.id);
     })
 
     client.on("cubeChange", function (input_data) {
@@ -89,7 +88,7 @@ io.sockets.on("connection", function (client) {
     })
 
     client.on("zapisDoBazy", function (data) {
-        mongoClient.connect("mongodb://" + data.ip + "/RubikCube", function (err, db) {
+        mongoClient.connect("mongodb://localhost/RubikCube", function (err, db) {
             if (err) console.log(err)
             else {
                 _db = db;

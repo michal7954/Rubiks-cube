@@ -369,15 +369,30 @@ function View(target, width, height) {
 
             }
             scene.remove(container);
+
+            /*if (checkWin()) {
+              //  $("#nickDiv").css("display", "block")
+               // clearInterval(ui.timerInterval)
+                $("#nickSubmit").on("click", function () {
+                    net.client.emit("zapisDoBazy", { "time": $("#timer").innerHTML, "nick": $("#nickInput").val() })
+                })
+
+                net.client.on("getcolls", function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        var playerScore = $("<p>")
+                        playerScore.innerHTML = i + ". " + data.nick + ": " + data.yourScore
+                        $("#scoreBoard").append(playerScore)
+                    }
+                })
+            }*/
         }
     }
-
-
-    function checkWin(tab) {
-        for (var i = 1; i < tab.length; i++) {
-            if (tab[i].userData.x * 110 == tab[i].position.x) {
-                if (tab[i].userData.y * 110 == tab[i].position.y) {
-                    if (tab[i].userData.z * 110 == tab[i].position.z) {
+    function checkWin() {
+        for (var i = 1; i < scene.children.length; i++) {
+            console.log(scene.children.length)
+            if (scene.children[i].userData.x * 110 == scene.children[i].position.x) {
+                if (scene.children[i].userData.y * 110 == scene.children[i].position.y) {
+                    if (scene.children[i].userData.z * 110 == scene.children[i].position.z) {
                         return true;
                     }
                 }
