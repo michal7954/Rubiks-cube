@@ -1,6 +1,5 @@
 function View(target, width, height) {
 
-    var game = this
     var view = this
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(
@@ -19,7 +18,7 @@ function View(target, width, height) {
 
     var axes = new THREE.AxesHelper(4000);
     axes.position.set(-161, -161, -161)
-    scene.add(axes);
+    //scene.add(axes);
 
     camera.position.set(600, 600, 600);
     camera.lookAt(scene.position);
@@ -86,7 +85,6 @@ function View(target, width, height) {
     // Oś Z == k
     //
     var cubes = [];
-
 
     for (i = -1; i < 2; i++) {
         for (j = -1; j < 2; j++) {
@@ -268,8 +266,9 @@ function View(target, width, height) {
             }
         }
     })
-    // ZMIENNE DLA ANIMACJI
 
+
+    // ZMIENNE DLA ANIMACJI
     var container = new THREE.Object3D;
     var frame_num = 0;
     this.animation = false;
@@ -435,6 +434,7 @@ function View(target, width, height) {
     */
 
     //-------------- RAYCASTER
+    //-------------- !!! "NIE PYTAJ MNIE, WIEM TYLE CO I TY" !!!--------------------------//
 
     var raycaster = new THREE.Raycaster();
     var mouseVector = new THREE.Vector2();
@@ -456,120 +456,119 @@ function View(target, width, height) {
     }
 
     this.calculate = function () {
-        pos = []
-        //console.log(over)
-        obj1 = over[0].position
-        obj2 = over[0].position
-        obj3 = over[over.length - 1].position
-        war = {
-            x: true,
-            y: true,
-            z: true,
+        if (!view.animation) {
+
+            pos = []
+            var obj1 = over[0].position
+            if (over[1])
+                var obj2 = over[1].position
+            obj3 = over[over.length - 1].position
+            war = {
+                x: true,
+                y: true,
+                z: true,
+            }
+
+            for (i = 0; i < over.length; i++) {
+                pos[i] = over[i].position
+                if (over[i].position.x != obj1.x) {
+                    war.x = false
+                }
+                if (over[i].position.y != obj1.y) {
+                    war.y = false
+                }
+                if (over[i].position.z != obj1.z) {
+                    war.z = false
+                }
+            }
+
+            if (war.x + war.y + war.z == 1) {
+
+                if (war.x) {
+                    var data = {
+                        axis: 'x',
+                        row: over[0].position.x / 110,
+                        duration: 30
+                    }
+                    var p1 = {
+                        x: obj1.z,
+                        y: obj1.y
+                    }
+                    var p2 = {
+                        x: obj2.z,
+                        y: obj2.y
+                    }
+                    var alfa = Math.atan2(p1.y, p1.x)
+                    var beta = Math.atan2(p2.y, p2.x)
+                    var gamma = beta - alfa;
+                    angle = gamma * 180 / Math.PI
+
+                    if (angle == 45 || angle == -315)
+                        data.direction = 0
+                    else if (angle == -45 || angle == 315)
+                        data.direction = 1
+
+                    view.move(data)
+                }
+
+                else if (war.y) {
+                    var data = {
+                        axis: 'y',
+                        row: over[0].position.y / 110,
+                        duration: 30
+                    }
+                    var p1 = {
+                        x: obj1.x,
+                        y: obj1.z
+                    }
+                    var p2 = {
+                        x: obj2.x,
+                        y: obj2.z
+                    }
+                    var alfa = Math.atan2(p1.y, p1.x)
+                    var beta = Math.atan2(p2.y, p2.x)
+                    var gamma = beta - alfa;
+                    angle = gamma * 180 / Math.PI
+
+                    if (angle == 45 || angle == -315)
+                        data.direction = 0
+                    else if (angle == -45 || angle == 315)
+                        data.direction = 1
+
+                    view.move(data)
+                }
+
+                else if (war.z) {
+
+                    var data = {
+                        axis: 'z',
+                        row: over[0].position.z / 110,
+                        duration: 30
+                    }
+                    var p1 = {
+                        x: obj1.x,
+                        y: obj1.y
+                    }
+                    var p2 = {
+                        x: obj2.x,
+                        y: obj2.y
+                    }
+                    var alfa = Math.atan2(p1.y, p1.x)
+                    var beta = Math.atan2(p2.y, p2.x)
+                    var gamma = beta - alfa;
+                    angle = gamma * 180 / Math.PI
+
+                    if (angle == 45 || angle == -315)
+                        data.direction = 1
+                    else if (angle == -45 || angle == 315)
+                        data.direction = 0
+
+                    view.move(data)
+                }
+            }
         }
-
-        for (i = 0; i < over.length; i++) {
-            pos[i] = over[i].position
-            if (over[i].position.x != obj1.x) {
-                war.x = false
-            }
-            if (over[i].position.y != obj1.y) {
-                war.y = false
-            }
-            if (over[i].position.z != obj1.z) {
-                war.z = false
-            }
-
-        }
-
-
-
-        if (war.x + war.y + war.z == 1) {
-
-            var axis
-            var row
-
-            if (war.x) {
-                axis = 'x'
-                row = over[0].position.x / 110
-            }
-
-            else if (war.y) {
-
-                axis = 'y'
-                row = over[0].position.y / 110
-                /*
-                if (obj1.x < obj2.x) {
-                    if (obj1.z > obj2.z) {
-                        console.log("a")
-                    }
-                    if (obj1.z < obj2.z) {
-                        console.log("b")
-                    }
-                }
-                if (obj1.x > obj2.x) {
-                    if (obj1.z > obj2.z) {
-                        console.log("c")
-                    }
-                    if (obj1.z < obj2.z) {
-                        console.log("d")
-                    }
-                }
-                
-                p1 = {
-                    x: obj1.x,
-                    y: obj1.z
-                }
-                p2 = {
-                    x: obj2.x,
-                    y: obj2.z
-                }
-                */
-                console.log(pos)
-            }
-
-            else if (war.z) {
-                axis = 'z'
-                row = over[0].position.z / 110
-            }
-
-            //console.log(row)
-            console.log(obj1, obj2)
-
-        }
-
         over = []
     }
-    /*
-    function angle(p1, p2) {
-        var p1 = {
-            x: 20,
-            y: 20
-        };
-
-        var p2 = {
-            x: 40,
-            y: 40
-        };
-
-        // angle in radians
-
-        // angle in degrees
-        var angleDeg = Math.atan(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI;
-        return angleDeg
-    }
-    */
-
-    function angle(ex, ey) {
-        var cx = 0
-        var cy = 0
-        var dy = ey - cy;
-        var dx = ex - cx;
-        var theta = Math.atan2(dy, dx); // range (-PI, PI]
-        theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
-        //if (theta < 0) theta = 360 + theta; // range [0, 360)
-        return theta;
-    }
-
 
     function render() {
         if (view.animation) frame()

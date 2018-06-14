@@ -99,39 +99,34 @@ function Ui() {
     //BUTTONY
     var axis = 'x'
     $('.axis').on('click', function () {
-        if (ui.active) {
-            $('.axis.picked').removeClass('picked')
-            $(this).addClass('picked')
-            axis = $(this).val()
-        }
-
+        $('.axis.picked').removeClass('picked')
+        $(this).addClass('picked')
+        axis = $(this).val()
     })
 
     var row = -1
     $('.row').on('click', function () {
-        if (ui.active) {
-            $('.row.picked').removeClass('picked')
-            $(this).addClass('picked')
-            row = $(this).val()
-        }
+        $('.row.picked').removeClass('picked')
+        $(this).addClass('picked')
+        row = $(this).val()
     })
 
-    //raycaster
+    //RAYCASTER
     var mousedown = false;
     $(document)
         .mousedown(function (e) {
-            if (/*ui.active &&*/ e.which == 1) {
+            if (ui.active && e.which == 1) {
                 mousedown = true
                 game.casting(e);
             }
         })
         .mousemove(function (e) {
-            if (/*ui.active &&*/ e.which == 1 && mousedown) {
+            if (ui.active && e.which == 1 && mousedown) {
                 game.casting(e);
             }
         })
         .mouseup(function (e) {
-            if (/*ui.active &&*/ e.which == 1) {
+            if (ui.active && e.which == 1) {
                 mousedown = false
                 game.calculate();
             }

@@ -20,7 +20,6 @@ function Net() {
 
     this.client.on('cameraChange', function (position) {
         preview.changeCamera(position);
-
     })
 
     this.client.on('createPreview', function () {
