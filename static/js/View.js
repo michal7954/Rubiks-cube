@@ -40,7 +40,7 @@ function View(target, width, height) {
                 var light = new SpotLight();
                 light.position.set(i * 600, j * 600, k * 600);
                 light.lookAt(scene.position);
-                scene.add(light);
+                //scene.add(light);
             }
         }
     }*/
@@ -285,31 +285,6 @@ function View(target, width, height) {
         frame_num = data.duration
         view.animation = true;
 
-        // CZYSZCZENIE KONTENERA I AKTUALIZOWANIE POZYCJI ORAZ ROTACJI BLOKÓW
-        /*for (i = 0; i < container.children.length; i++) {
-
-            block = container.children[i]
-            position = block.getWorldPosition()
-            rotation = block.getWorldRotation();
-
-            scene.add(container.children[i]);
-
-            block.position.x = Math.round(position.x)
-            block.position.y = Math.round(position.y)
-            block.position.z = Math.round(position.z)
-            block.userData = {
-                x: Math.round(position.x),
-                y: Math.round(position.y),
-                z: Math.round(position.z)
-            }
-
-            block.rotation.x = rotation._x
-            block.rotation.y = rotation._y
-            block.rotation.z = rotation._z
-
-            i--;
-
-        }*/
         container = new THREE.Object3D;
 
         // DYNAMICZNE PUSHOWANIE RZĘDU DO KONTENERA
@@ -322,6 +297,7 @@ function View(target, width, height) {
             }
         }
         scene.add(container);
+
 
         //checkWin(blocksOfMinusX)
         //checkWin(blocksOfMinusY)
@@ -366,6 +342,33 @@ function View(target, width, height) {
         }
         else {
             view.animation = false;
+
+            // CZYSZCZENIE KONTENERA I AKTUALIZOWANIE POZYCJI ORAZ ROTACJI BLOKÓW
+            for (i = 0; i < container.children.length; i++) {
+
+                block = container.children[i]
+                position = block.getWorldPosition()
+                rotation = block.getWorldRotation();
+
+                scene.add(container.children[i]);
+
+                block.position.x = Math.round(position.x)
+                block.position.y = Math.round(position.y)
+                block.position.z = Math.round(position.z)
+                block.userData = {
+                    x: Math.round(position.x),
+                    y: Math.round(position.y),
+                    z: Math.round(position.z)
+                }
+
+                block.rotation.x = rotation._x
+                block.rotation.y = rotation._y
+                block.rotation.z = rotation._z
+
+                i--;
+
+            }
+            scene.remove(container);
         }
     }
 
