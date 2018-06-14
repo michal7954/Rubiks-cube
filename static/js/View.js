@@ -182,7 +182,7 @@ function View(target, width, height) {
             }
         }
 
-        console.log(redModels)
+        //console.log(redModels)
     })
 
     var modelMinusX = new Model();
@@ -208,7 +208,7 @@ function View(target, width, height) {
             }
         }
 
-        console.log(greenModels)
+        //console.log(greenModels)
     })
 
     var modelY = new Model();
@@ -234,7 +234,7 @@ function View(target, width, height) {
             }
         }
 
-        console.log(blueModels)
+        //console.log(blueModels)
     })
 
     var modelMinusY = new Model();
@@ -260,7 +260,7 @@ function View(target, width, height) {
             }
         }
 
-        console.log(lightBlueModels)
+        //console.log(lightBlueModels)
     })
 
     var modelZ = new Model();
@@ -286,7 +286,7 @@ function View(target, width, height) {
             }
         }
 
-        console.log(orangeModels)
+        //console.log(orangeModels)
     })
 
     var modelMinusZ = new Model();
@@ -312,7 +312,7 @@ function View(target, width, height) {
             }
         }
 
-        console.log(purpleModels)
+        //console.log(purpleModels)
     })
 
 
@@ -385,7 +385,7 @@ function View(target, width, height) {
 
         }
         //chwila spoczynku między animacjami
-        else if (frame_num <= 0 && frame_num > -4) {
+        else if (frame_num <= 0 && frame_num > -30) {
             frame_num--;
         }
         else {
