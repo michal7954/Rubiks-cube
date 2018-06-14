@@ -8,10 +8,6 @@ function Ui() {
     $(document).keydown(function (e) {
         if (e.key == "Enter" && game.animation == false) {
 
-            if (isTimerTickTock == false) {
-                timer();
-            }
-
             var input_data = {
                 direction: Math.floor(Math.random() * 2),
                 axis: O[Math.floor(Math.random() * 3)],
