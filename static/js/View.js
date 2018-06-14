@@ -9,8 +9,17 @@ function View(target, width, height) {
         10000
     );
 
-    var renderer = new THREE.WebGLRenderer();
-    renderer.setClearColor(0x000);
+    if (target == 'body') {
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setClearColor(0x000000);
+    }
+
+    else {
+        var renderer = new THREE.WebGLRenderer({ alpha: true });
+        renderer.setClearColor(0x000000, 0);
+    }
+
+
     renderer.setSize(width, height);
     renderer.shadowMap.enabled = true
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;

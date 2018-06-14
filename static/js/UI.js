@@ -127,6 +127,9 @@ function Ui() {
             if (ui.active && e.which == 1) {
                 mousedown = false
                 game.calculate();
+                if (isTimerTickTock == false) {
+                    timer();
+                }
             }
         })
 
