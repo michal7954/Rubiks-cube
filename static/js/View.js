@@ -44,35 +44,42 @@ function View(target, width, height) {
         }
     }
 
-    //Tablice dla odpowiednich ścian kostki, aby każda ściana miała identyczny a zarazem różny kolor
+    //Tablice dla odpowiednich ścian kostki oraz dla odpowiednich kolorów modeli, aby każda ściana miała identyczny a zarazem różny kolor
 
+    var redModels = []
     var blocksOfX = []
     for (a = 0; a < 3; a++) {
         blocksOfX[a] = []
     }
+    var greenModels = []
     var blocksOfMinusX = []
     for (a = 0; a < 3; a++) {
         blocksOfMinusX[a] = []
     }
 
+    var blueModels = []
     var blocksOfY = []
     for (a = 0; a < 3; a++) {
         blocksOfY[a] = []
     }
+
+    var lightBlueModels = []
     var blocksOfMinusY = []
     for (a = 0; a < 3; a++) {
         blocksOfMinusY[a] = []
     }
 
+    var orangeModels = []
     var blocksOfZ = []
     for (a = 0; a < 3; a++) {
         blocksOfZ[a] = []
     }
+
+    var purpleModels = []
     var blocksOfMinusZ = []
     for (a = 0; a < 3; a++) {
         blocksOfMinusZ[a] = []
     }
-
 
     //DODANIE MESHY
 
@@ -137,11 +144,14 @@ function View(target, width, height) {
 
     // Ładowanie 6 różnych modeli, aby miały ten sam kolor ścian. Dodatkowo tutaj dodaje do Bloków z tablicy właśnie te modele
 
-    var positionOfStick = 52;
-    var scaleOfStick = 40;
+    var positionOfStick = 54;
+    var positionOfStickY = -40
+    var scaleOfStick = 8;
 
     var modelX = new Model();
     modelX.loadModel("gfx/nalepka.json", function (data) {
+
+        var iter = 0
 
         var materialX = new THREE.MeshBasicMaterial({
             side: THREE.DoubleSide,
@@ -154,16 +164,21 @@ function View(target, width, height) {
                 var clone = data.clone()
                 clone.scale.set(scaleOfStick, scaleOfStick, 1)
                 clone.material = materialX
-                clone.position.set(positionOfStick, 1, 1)
+                clone.position.set(positionOfStick - 5, positionOfStickY, 36)
                 clone.rotateY(Math.PI / 2)
-                clone.userData = { x: 1, y: j, z: k }
+                clone.userData = { x: 1, y: j, z: k, color: "red" }
                 blocksOfX[j + 1][k + 1].add(clone)
+                redModels[iter] = clone
+                iter++
             }
         }
+
+        console.log(redModels)
     })
 
     var modelMinusX = new Model();
     modelMinusX.loadModel("gfx/nalepka1.json", function (data) {
+        var iter = 0
         var materialMinusX = new THREE.MeshBasicMaterial({
             side: THREE.DoubleSide,
             wireframe: false,
@@ -175,16 +190,21 @@ function View(target, width, height) {
                 var clone = data.clone()
                 clone.scale.set(scaleOfStick, scaleOfStick, 1)
                 clone.material = materialMinusX
-                clone.position.set(-positionOfStick, 1, 1)
+                clone.position.set(-positionOfStick, positionOfStickY, 36)
                 clone.rotateY(Math.PI / 2)
-                clone.userData = { x: -1, y: j, z: k }
+                clone.userData = { x: -1, y: j, z: k, color: "green" }
                 blocksOfMinusX[j + 1][k + 1].add(clone)
+                greenModels[iter] = clone
+                iter++
             }
         }
+
+        console.log(greenModels)
     })
 
     var modelY = new Model();
     modelY.loadModel("gfx/nalepka2.json", function (data) {
+        var iter = 0
         var materialY = new THREE.MeshBasicMaterial({
             side: THREE.DoubleSide,
             wireframe: false,
@@ -196,16 +216,21 @@ function View(target, width, height) {
                 var clone = data.clone()
                 clone.scale.set(scaleOfStick, scaleOfStick, 1)
                 clone.material = materialY
-                clone.position.set(1, positionOfStick, 1)
+                clone.position.set(positionOfStickY, positionOfStick, positionOfStickY)
                 clone.rotateX(Math.PI / 2)
-                clone.userData = { x: i, y: 1, z: k }
+                clone.userData = { x: i, y: 1, z: k, color: "blue" }
                 blocksOfY[i + 1][k + 1].add(clone)
+                blueModels[iter] = clone
+                iter++
             }
         }
+
+        console.log(blueModels)
     })
 
     var modelMinusY = new Model();
     modelMinusY.loadModel("gfx/nalepka3.json", function (data) {
+        var iter = 0
         var materialMinusY = new THREE.MeshBasicMaterial({
             side: THREE.DoubleSide,
             wireframe: false,
@@ -217,16 +242,21 @@ function View(target, width, height) {
                 var clone = data.clone()
                 clone.scale.set(scaleOfStick, scaleOfStick, 1)
                 clone.material = materialMinusY
-                clone.position.set(1, -positionOfStick, 1)
+                clone.position.set(positionOfStickY, -positionOfStick + 5, positionOfStickY)
                 clone.rotateX(Math.PI / 2)
-                clone.userData = { x: i, y: -1, z: k }
+                clone.userData = { x: i, y: -1, z: k, color: "lightblue" }
                 blocksOfMinusY[i + 1][k + 1].add(clone)
+                lightBlueModels[iter] = clone
+                iter++
             }
         }
+
+        console.log(lightBlueModels)
     })
 
     var modelZ = new Model();
     modelZ.loadModel("gfx/nalepka4.json", function (data) {
+        var iter = 0
         var materialZ = new THREE.MeshBasicMaterial({
             side: THREE.DoubleSide,
             wireframe: false,
@@ -238,16 +268,21 @@ function View(target, width, height) {
                 var clone = data.clone()
                 clone.scale.set(scaleOfStick, scaleOfStick, 1)
                 clone.material = materialZ
-                clone.position.set(1, 1, positionOfStick)
+                clone.position.set(-positionOfStickY, positionOfStickY, positionOfStick - 5)
                 clone.rotateZ(Math.PI / 2)
-                clone.userData = { x: i, y: j, z: 1 }
+                clone.userData = { x: i, y: j, z: 1, color: "orange" }
                 blocksOfZ[i + 1][j + 1].add(clone)
+                orangeModels[iter] = clone
+                iter++
             }
         }
+
+        console.log(orangeModels)
     })
 
     var modelMinusZ = new Model();
     modelMinusZ.loadModel("gfx/nalepka5.json", function (data) {
+        var iter = 0
         var materialMinusZ = new THREE.MeshBasicMaterial({
             side: THREE.DoubleSide,
             wireframe: false,
@@ -259,12 +294,16 @@ function View(target, width, height) {
                 var clone = data.clone()
                 clone.scale.set(scaleOfStick, scaleOfStick, 1)
                 clone.material = materialMinusZ
-                clone.position.set(1, 1, -positionOfStick)
+                clone.position.set(-positionOfStickY, positionOfStickY, -positionOfStick)
                 clone.rotateZ(Math.PI / 2)
-                clone.userData = { x: i, y: j, z: -1 }
+                clone.userData = { x: i, y: j, z: -1, color: "purple" }
                 blocksOfMinusZ[i + 1][j + 1].add(clone)
+                purpleModels[iter] = clone
+                iter++
             }
         }
+
+        console.log(purpleModels)
     })
 
 
@@ -337,12 +376,12 @@ function View(target, width, height) {
 
         }
         //chwila spoczynku między animacjami
-        else if (frame_num <= 0 && frame_num > -6) {
+        else if (frame_num <= 0 && frame_num > -4) {
             frame_num--;
         }
         else {
 
-            view.animation = false;
+
 
             // CZYSZCZENIE KONTENERA I AKTUALIZOWANIE POZYCJI ORAZ ROTACJI BLOKÓW
             for (i = 0; i < container.children.length; i++) {
@@ -353,17 +392,9 @@ function View(target, width, height) {
 
                 scene.add(container.children[i]);
 
-                //console.log("Bloczek: ")
-                //console.log(block)
-
                 block.position.x = Math.round(position.x)
                 block.position.y = Math.round(position.y)
                 block.position.z = Math.round(position.z)
-                block.userData = {
-                    x: Math.round(position.x),
-                    y: Math.round(position.y),
-                    z: Math.round(position.z)
-                }
 
                 block.rotation.x = rotation._x
                 block.rotation.y = rotation._y
@@ -374,64 +405,109 @@ function View(target, width, height) {
             }
             scene.remove(container);
 
-            if (container.children.length == 0) {
-                //console.log(container.children)
-                //console.log(checkWin())
+            if (checkWin()[0]) {
+                $("#nickDiv").css("display", "block")
+                //clearInterval(ui.timerInt)
+                console.log(ui.timerInterval)
+                $("#nickSubmit").on("click", function () {
+                    $("#scoreBoard").empty()
+                    net.client.emit("zapisDoBazy", { "time": $("#timer")[0].innerHTML, "nick": $("#nickInput").val() })
+                })
+
+                net.client.on("getcolls", function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        var playerScore = $("<p>")
+                        playerScore[0].innerHTML = i + ". " + data[i].nick + ": " + data[i].yourScore
+                        $("#scoreBoard").append(playerScore)
+                    }
+                    $("#inputsForSendScore").empty()
+                })
             }
 
-            //if (checkWin()) {
-            /*
-        $("#nickDiv").css("display", "block")
-        // clearInterval(ui.timerInterval)
-        $("#nickSubmit").on("click", function () {
-            console.log("click")
-            $("#scoreBoard").empty()
-            net.client.emit("zapisDoBazy", { "time": $("#timer")[0].innerHTML, "nick": $("#nickInput").val() })
-        })
-
-        net.client.on("getcolls", function (data) {
-            console.log(data)
-            for (var i = 0; i < data.length; i++) {
-                var playerScore = $("<p>")
-                playerScore[0].innerHTML = i + ". " + data[i].nick + ": " + data[i].yourScore
-                $("#scoreBoard").append(playerScore)
-            }
-            $("#inputsForSendScore").empty()
-        })*/
-            // }*/
-
-
-            //----------------  !!!  AKTUALIZACJA STANÓW !!!
-            //$('#you').text(dobre_z_game / wszystkie ?? 26)
-            //$('#opponent').text(dobre_z_gamepreview / wszystkie ?? 26)
+            view.animation = false;
         }
     }
-    /*
     function checkWin() {
+        red = true
+        green = true
+        blue = true
+        lightBlue = true
+        orange = true
+        purple = true
         good = 0
         wygrana = true
-        for (var i = 1; i < scene.children.length; i++) {
-            console.log(container)
-            console.log(scene.children.length)
-            if (scene.children[i].userData.x * 110 == Math.round(scene.children[i].position.x)) {
-                if (scene.children[i].userData.y * 110 == Math.round(scene.children[i].position.y)) {
-                    if (scene.children[i].userData.z * 110 == Math.round(scene.children[i].position.z)) {
-                        good++
-                        console.log("Pozycja: " + Math.round(scene.children[i].position.x))
-                        console.log("userData: " + scene.children[i].userData.x)
-                        console.log("Blok")
-                        console.log(i)
-                        console.log("Blok")
-                    }
-                }
+
+        for (var i = 1; i < redModels.length; i++) {
+            if (Math.round(redModels[0].getWorldRotation()._x) == Math.round(redModels[i].getWorldRotation()._x)) {
             } else {
-                wygrana = false
+                red = false
+                wygrana = false;
             }
         }
+
+        for (var i = 1; i < greenModels.length; i++) {
+            if (Math.round(greenModels[0].getWorldRotation()._x) == Math.round(greenModels[i].getWorldRotation()._x)) {
+            } else {
+                green = false
+                wygrana = false;
+            }
+        }
+
+        for (var i = 1; i < blueModels.length; i++) {
+            if (Math.round(blueModels[0].getWorldRotation()._x) == Math.round(blueModels[i].getWorldRotation()._x)) {
+            } else {
+                blue = false
+                wygrana = false;
+            }
+        }
+
+        for (var i = 1; i < lightBlueModels.length; i++) {
+            if (Math.round(lightBlueModels[0].getWorldRotation()._x) == Math.round(lightBlueModels[i].getWorldRotation()._x)) {
+            } else {
+                lightBlue = false
+                wygrana = false;
+            }
+        }
+
+        for (var i = 1; i < orangeModels.length; i++) {
+            if (Math.round(orangeModels[0].getWorldRotation()._x) == Math.round(orangeModels[i].getWorldRotation()._x)) {
+            } else {
+                orange = false
+                wygrana = false;
+            }
+        }
+
+        for (var i = 1; i < purpleModels.length; i++) {
+            if (Math.round(purpleModels[0].getWorldRotation()._x) == Math.round(purpleModels[i].getWorldRotation()._x)) {
+            } else {
+                purple = false
+                wygrana = false;
+            }
+        }
+
+        if (red) {
+            good++
+        }
+        if (green) {
+            good++
+        }
+        if (blue) {
+            good++
+        }
+        if (lightBlue) {
+            good++
+        }
+        if (purple) {
+            good++
+        }
+        if (orange) {
+            good++
+        }
+
         var tab = [wygrana, good];
         return tab;
     }
-    */
+
 
     //-------------- RAYCASTER
     //-------------- !!! "NIE PYTAJ MNIE, WIEM TYLE CO I TY" !!!--------------------------//
