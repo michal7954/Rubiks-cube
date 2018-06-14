@@ -1,12 +1,5 @@
 function View(target, width, height) {
 
-    var greenWin;
-    var redWin;
-    var blueWin;
-    var yellowWin;
-    var purpleWin;
-    var lightBlueWin;
-    var game = this
     var view = this
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(
@@ -16,8 +9,17 @@ function View(target, width, height) {
         10000
     );
 
-    var renderer = new THREE.WebGLRenderer();
-    renderer.setClearColor(0x000);
+    if (target == 'body') {
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setClearColor(0x000000);
+    }
+
+    else {
+        var renderer = new THREE.WebGLRenderer({ alpha: true });
+        renderer.setClearColor(0x000000, 0);
+    }
+
+
     renderer.setSize(width, height);
     renderer.shadowMap.enabled = true
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -25,7 +27,7 @@ function View(target, width, height) {
 
     var axes = new THREE.AxesHelper(4000);
     axes.position.set(-161, -161, -161)
-    scene.add(axes);
+    //scene.add(axes);
 
     camera.position.set(600, 600, 600);
     camera.lookAt(scene.position);
@@ -51,56 +53,66 @@ function View(target, width, height) {
         }
     }
 
-    //Tablice dla odpowiednich ścian kostki, aby każda ściana miała identyczny a zarazem różny kolor
+    //Tablice dla odpowiednich ścian kostki oraz dla odpowiednich kolorów modeli, aby każda ściana miała identyczny a zarazem różny kolor
 
+    var redModels = []
     var blocksOfX = []
     for (a = 0; a < 3; a++) {
         blocksOfX[a] = []
     }
+    var greenModels = []
     var blocksOfMinusX = []
     for (a = 0; a < 3; a++) {
         blocksOfMinusX[a] = []
     }
 
+    var blueModels = []
     var blocksOfY = []
     for (a = 0; a < 3; a++) {
         blocksOfY[a] = []
     }
+
+    var lightBlueModels = []
     var blocksOfMinusY = []
     for (a = 0; a < 3; a++) {
         blocksOfMinusY[a] = []
     }
 
+    var orangeModels = []
     var blocksOfZ = []
     for (a = 0; a < 3; a++) {
         blocksOfZ[a] = []
     }
+
+    var purpleModels = []
     var blocksOfMinusZ = []
     for (a = 0; a < 3; a++) {
         blocksOfMinusZ[a] = []
     }
 
-
     //DODANIE MESHY
 
-    var geometry = new THREE.BoxGeometry(100, 100, 100);
 
-    var material = new THREE.MeshPhongMaterial({
-        color: 0x000000,
-        specular: 0xFFD700,
-        shininess: 24,
-        side: THREE.DoubleSide,
-    })
+
 
     //
     // Oś X == i
     // Oś Y == j
     // Oś Z == k
     //
+    var cubes = [];
 
     for (i = -1; i < 2; i++) {
         for (j = -1; j < 2; j++) {
             for (k = -1; k < 2; k++) {
+
+                var geometry = new THREE.BoxGeometry(100, 100, 100);
+                var material = new THREE.MeshPhongMaterial({
+                    color: 0x000000,
+                    specular: 0xFFD700,
+                    shininess: 18,
+                    side: THREE.DoubleSide,
+                })
 
                 var block = new THREE.Object3D;
 
@@ -108,10 +120,12 @@ function View(target, width, height) {
                 cube.castShadow = true
                 cube.receiveShadow = true
                 block.add(cube);
+                cubes.push(cube)
 
                 block.position.set(i * 110, j * 110, k * 110)
                 block.userData = { x: i, y: j, z: k }
                 scene.add(block);
+
 
                 if (i == -1) {
                     blocksOfMinusX[j + 1][k + 1] = block
@@ -131,9 +145,6 @@ function View(target, width, height) {
                 if (k == 1) {
                     blocksOfZ[i + 1][j + 1] = block
                 }
-
-
-
             }
         }
     }
@@ -142,11 +153,14 @@ function View(target, width, height) {
 
     // Ładowanie 6 różnych modeli, aby miały ten sam kolor ścian. Dodatkowo tutaj dodaje do Bloków z tablicy właśnie te modele
 
-    var positionOfStick = 52;
-    var scaleOfStick = 40;
+    var positionOfStick = 54;
+    var positionOfStickY = -40
+    var scaleOfStick = 8;
 
     var modelX = new Model();
     modelX.loadModel("gfx/nalepka.json", function (data) {
+
+        var iter = 0
 
         var materialX = new THREE.MeshBasicMaterial({
             side: THREE.DoubleSide,
@@ -159,16 +173,19 @@ function View(target, width, height) {
                 var clone = data.clone()
                 clone.scale.set(scaleOfStick, scaleOfStick, 1)
                 clone.material = materialX
-                clone.position.set(positionOfStick, 1, 1)
+                clone.position.set(positionOfStick - 5, positionOfStickY, 36)
                 clone.rotateY(Math.PI / 2)
-                clone.userData = { x: 1, y: j, z: k }
+                clone.userData = { x: 1, y: j, z: k, color: "red" }
                 blocksOfX[j + 1][k + 1].add(clone)
+                redModels[iter] = clone
+                iter++
             }
         }
     })
 
     var modelMinusX = new Model();
     modelMinusX.loadModel("gfx/nalepka1.json", function (data) {
+        var iter = 0
         var materialMinusX = new THREE.MeshBasicMaterial({
             side: THREE.DoubleSide,
             wireframe: false,
@@ -180,16 +197,19 @@ function View(target, width, height) {
                 var clone = data.clone()
                 clone.scale.set(scaleOfStick, scaleOfStick, 1)
                 clone.material = materialMinusX
-                clone.position.set(-positionOfStick, 1, 1)
+                clone.position.set(-positionOfStick, positionOfStickY, 36)
                 clone.rotateY(Math.PI / 2)
-                clone.userData = { x: -1, y: j, z: k }
+                clone.userData = { x: -1, y: j, z: k, color: "green" }
                 blocksOfMinusX[j + 1][k + 1].add(clone)
+                greenModels[iter] = clone
+                iter++
             }
         }
     })
 
     var modelY = new Model();
     modelY.loadModel("gfx/nalepka2.json", function (data) {
+        var iter = 0
         var materialY = new THREE.MeshBasicMaterial({
             side: THREE.DoubleSide,
             wireframe: false,
@@ -201,16 +221,19 @@ function View(target, width, height) {
                 var clone = data.clone()
                 clone.scale.set(scaleOfStick, scaleOfStick, 1)
                 clone.material = materialY
-                clone.position.set(1, positionOfStick, 1)
+                clone.position.set(positionOfStickY, positionOfStick, positionOfStickY)
                 clone.rotateX(Math.PI / 2)
-                clone.userData = { x: i, y: 1, z: k }
+                clone.userData = { x: i, y: 1, z: k, color: "blue" }
                 blocksOfY[i + 1][k + 1].add(clone)
+                blueModels[iter] = clone
+                iter++
             }
         }
     })
 
     var modelMinusY = new Model();
     modelMinusY.loadModel("gfx/nalepka3.json", function (data) {
+        var iter = 0
         var materialMinusY = new THREE.MeshBasicMaterial({
             side: THREE.DoubleSide,
             wireframe: false,
@@ -222,16 +245,19 @@ function View(target, width, height) {
                 var clone = data.clone()
                 clone.scale.set(scaleOfStick, scaleOfStick, 1)
                 clone.material = materialMinusY
-                clone.position.set(1, -positionOfStick, 1)
+                clone.position.set(positionOfStickY, -positionOfStick + 5, positionOfStickY)
                 clone.rotateX(Math.PI / 2)
-                clone.userData = { x: i, y: -1, z: k }
+                clone.userData = { x: i, y: -1, z: k, color: "lightblue" }
                 blocksOfMinusY[i + 1][k + 1].add(clone)
+                lightBlueModels[iter] = clone
+                iter++
             }
         }
     })
 
     var modelZ = new Model();
     modelZ.loadModel("gfx/nalepka4.json", function (data) {
+        var iter = 0
         var materialZ = new THREE.MeshBasicMaterial({
             side: THREE.DoubleSide,
             wireframe: false,
@@ -243,16 +269,19 @@ function View(target, width, height) {
                 var clone = data.clone()
                 clone.scale.set(scaleOfStick, scaleOfStick, 1)
                 clone.material = materialZ
-                clone.position.set(1, 1, positionOfStick)
+                clone.position.set(-positionOfStickY, positionOfStickY, positionOfStick - 5)
                 clone.rotateZ(Math.PI / 2)
-                clone.userData = { x: i, y: j, z: 1 }
+                clone.userData = { x: i, y: j, z: 1, color: "orange" }
                 blocksOfZ[i + 1][j + 1].add(clone)
+                orangeModels[iter] = clone
+                iter++
             }
         }
     })
 
     var modelMinusZ = new Model();
     modelMinusZ.loadModel("gfx/nalepka5.json", function (data) {
+        var iter = 0
         var materialMinusZ = new THREE.MeshBasicMaterial({
             side: THREE.DoubleSide,
             wireframe: false,
@@ -264,15 +293,18 @@ function View(target, width, height) {
                 var clone = data.clone()
                 clone.scale.set(scaleOfStick, scaleOfStick, 1)
                 clone.material = materialMinusZ
-                clone.position.set(1, 1, -positionOfStick)
+                clone.position.set(-positionOfStickY, positionOfStickY, -positionOfStick)
                 clone.rotateZ(Math.PI / 2)
-                clone.userData = { x: i, y: j, z: -1 }
+                clone.userData = { x: i, y: j, z: -1, color: "purple" }
                 blocksOfMinusZ[i + 1][j + 1].add(clone)
+                purpleModels[iter] = clone
+                iter++
             }
         }
     })
-    // ZMIENNE DLA ANIMACJI
 
+
+    // ZMIENNE DLA ANIMACJI
     var container = new THREE.Object3D;
     var frame_num = 0;
     this.animation = false;
@@ -294,31 +326,6 @@ function View(target, width, height) {
         frame_num = data.duration
         view.animation = true;
 
-        // CZYSZCZENIE KONTENERA I AKTUALIZOWANIE POZYCJI ORAZ ROTACJI BLOKÓW
-        for (i = 0; i < container.children.length; i++) {
-
-            block = container.children[i]
-            position = block.getWorldPosition()
-            rotation = block.getWorldRotation();
-
-            scene.add(container.children[i]);
-
-            block.position.x = Math.round(position.x)
-            block.position.y = Math.round(position.y)
-            block.position.z = Math.round(position.z)
-            block.userData = {
-                x: Math.round(position.x),
-                y: Math.round(position.y),
-                z: Math.round(position.z)
-            }
-
-            block.rotation.x = rotation._x
-            block.rotation.y = rotation._y
-            block.rotation.z = rotation._z
-
-            i--;
-
-        }
         container = new THREE.Object3D;
 
         // DYNAMICZNE PUSHOWANIE RZĘDU DO KONTENERA
@@ -331,14 +338,6 @@ function View(target, width, height) {
             }
         }
         scene.add(container);
-
-        //checkWin(blocksOfMinusX)
-        //checkWin(blocksOfMinusY)
-        //checkWin(blocksOfMinusZ)
-        checkWin(blocksOfX)
-        //checkWin(blocksOfY)
-        //checkWin(blocksOfZ)
-
     }
 
     this.changeCamera = function (position) {
@@ -347,17 +346,6 @@ function View(target, width, height) {
         camera.position.z = position.z;
 
         camera.lookAt(scene.position)
-    }
-
-    function checkWin(tab) {
-        //for (var i = 0; i < tab.length; i++) {
-            //for (var j = 0; j < tab.length; j++) {
-
-                console.log(tab[0][0].position, tab[0][0].userData)
-                console.log("sdasdf")
-
-           // }
-       // }
     }
 
     function frame() {
@@ -384,9 +372,272 @@ function View(target, width, height) {
             frame_num--;
 
         }
+        //chwila spoczynku między animacjami
+        else if (frame_num <= 0 && frame_num > -30) {
+            frame_num--;
+        }
         else {
+            // CZYSZCZENIE KONTENERA I AKTUALIZOWANIE POZYCJI ORAZ ROTACJI BLOKÓW
+            for (i = 0; i < container.children.length; i++) {
+
+                block = container.children[i]
+                position = block.getWorldPosition()
+                rotation = block.getWorldRotation();
+
+                scene.add(container.children[i]);
+
+                block.position.x = Math.round(position.x)
+                block.position.y = Math.round(position.y)
+                block.position.z = Math.round(position.z)
+
+                block.rotation.x = rotation._x
+                block.rotation.y = rotation._y
+                block.rotation.z = rotation._z
+
+                i--;
+
+            }
+            scene.remove(container);
+
+            if(target=='body'){
+                if (data.enter) { } else {
+                    if (checkWin()[0]) {
+                        ui.getTimerInterval()
+                        ui.active = false
+                        $("#nickDiv").css("display", "block")
+                        $("#nickSubmit").on("click", function () {
+                            input = {
+                                id: net.client.id,
+                                time: $("#timer")[0].innerHTML,
+                                nick: $("#nickInput").val()
+                            }
+                            net.client.emit("cubeSolved", input)
+                        })
+                    }
+                }
+            }
+            
             view.animation = false;
         }
+    }
+
+    function checkWin() {
+        red = true
+        green = true
+        blue = true
+        lightBlue = true
+        orange = true
+        purple = true
+        good = 0
+        wygrana = true
+
+        for (var i = 1; i < redModels.length; i++) {
+            if (Math.round(redModels[0].getWorldRotation()._x) == Math.round(redModels[i].getWorldRotation()._x)) {
+            } else {
+                red = false
+                wygrana = false;
+            }
+        }
+
+        for (var i = 1; i < greenModels.length; i++) {
+            if (Math.round(greenModels[0].getWorldRotation()._x) == Math.round(greenModels[i].getWorldRotation()._x)) {
+            } else {
+                green = false
+                wygrana = false;
+            }
+        }
+
+        for (var i = 1; i < blueModels.length; i++) {
+            if (Math.round(blueModels[0].getWorldRotation()._x) == Math.round(blueModels[i].getWorldRotation()._x)) {
+            } else {
+                blue = false
+                wygrana = false;
+            }
+        }
+
+        for (var i = 1; i < lightBlueModels.length; i++) {
+            if (Math.round(lightBlueModels[0].getWorldRotation()._x) == Math.round(lightBlueModels[i].getWorldRotation()._x)) {
+            } else {
+                lightBlue = false
+                wygrana = false;
+            }
+        }
+
+        for (var i = 1; i < orangeModels.length; i++) {
+            if (Math.round(orangeModels[0].getWorldRotation()._x) == Math.round(orangeModels[i].getWorldRotation()._x)) {
+            } else {
+                orange = false
+                wygrana = false;
+            }
+        }
+
+        for (var i = 1; i < purpleModels.length; i++) {
+            if (Math.round(purpleModels[0].getWorldRotation()._x) == Math.round(purpleModels[i].getWorldRotation()._x)) {
+            } else {
+                purple = false
+                wygrana = false;
+            }
+        }
+
+        if (red) {
+            good++
+        }
+        if (green) {
+            good++
+        }
+        if (blue) {
+            good++
+        }
+        if (lightBlue) {
+            good++
+        }
+        if (purple) {
+            good++
+        }
+        if (orange) {
+            good++
+        }
+
+        var tab = [wygrana, good];
+        return tab;
+    }
+
+
+    //-------------- RAYCASTER
+    //-------------- !!! "NIE PYTAJ MNIE, WIEM TYLE CO I TY" !!!--------------------------//
+
+    var raycaster = new THREE.Raycaster();
+    var mouseVector = new THREE.Vector2();
+    var over = [];
+
+    this.casting = function (e) {
+
+        mouseVector.x = (e.clientX / $(window).width()) * 2 - 1;
+        mouseVector.y = -(e.clientY / $(window).height()) * 2 + 1;
+
+        raycaster.setFromCamera(mouseVector, camera);
+        var intersects = raycaster.intersectObjects(cubes);
+
+        if (intersects.length > 0) {
+            if (!over.includes(intersects[0].object.parent)) {
+                over.push(intersects[0].object.parent)
+            }
+        }
+    }
+
+    this.calculate = function () {
+        if (!view.animation) {
+
+            pos = []
+            var obj1 = over[0].position
+            if (over[1])
+                var obj2 = over[1].position
+            obj3 = over[over.length - 1].position
+            war = {
+                x: true,
+                y: true,
+                z: true,
+            }
+
+            for (i = 0; i < over.length; i++) {
+                pos[i] = over[i].position
+                if (over[i].position.x != obj1.x) {
+                    war.x = false
+                }
+                if (over[i].position.y != obj1.y) {
+                    war.y = false
+                }
+                if (over[i].position.z != obj1.z) {
+                    war.z = false
+                }
+            }
+
+            if (war.x + war.y + war.z == 1) {
+
+                if (war.x) {
+                    var data = {
+                        axis: 'x',
+                        row: over[0].position.x / 110,
+                        duration: 30
+                    }
+                    var p1 = {
+                        x: obj1.z,
+                        y: obj1.y
+                    }
+                    var p2 = {
+                        x: obj2.z,
+                        y: obj2.y
+                    }
+                    var alfa = Math.atan2(p1.y, p1.x)
+                    var beta = Math.atan2(p2.y, p2.x)
+                    var gamma = beta - alfa;
+                    angle = gamma * 180 / Math.PI
+
+                    if (angle == 45 || angle == -315)
+                        data.direction = 0
+                    else if (angle == -45 || angle == 315)
+                        data.direction = 1
+
+                    view.move(data)
+                }
+
+                else if (war.y) {
+                    var data = {
+                        axis: 'y',
+                        row: over[0].position.y / 110,
+                        duration: 30
+                    }
+                    var p1 = {
+                        x: obj1.x,
+                        y: obj1.z
+                    }
+                    var p2 = {
+                        x: obj2.x,
+                        y: obj2.z
+                    }
+                    var alfa = Math.atan2(p1.y, p1.x)
+                    var beta = Math.atan2(p2.y, p2.x)
+                    var gamma = beta - alfa;
+                    angle = gamma * 180 / Math.PI
+
+                    if (angle == 45 || angle == -315)
+                        data.direction = 0
+                    else if (angle == -45 || angle == 315)
+                        data.direction = 1
+
+                    view.move(data)
+                }
+
+                else if (war.z) {
+
+                    var data = {
+                        axis: 'z',
+                        row: over[0].position.z / 110,
+                        duration: 30
+                    }
+                    var p1 = {
+                        x: obj1.x,
+                        y: obj1.y
+                    }
+                    var p2 = {
+                        x: obj2.x,
+                        y: obj2.y
+                    }
+                    var alfa = Math.atan2(p1.y, p1.x)
+                    var beta = Math.atan2(p2.y, p2.x)
+                    var gamma = beta - alfa;
+                    angle = gamma * 180 / Math.PI
+
+                    if (angle == 45 || angle == -315)
+                        data.direction = 1
+                    else if (angle == -45 || angle == 315)
+                        data.direction = 0
+
+                    view.move(data)
+                }
+            }
+        }
+        over = []
     }
 
     function render() {

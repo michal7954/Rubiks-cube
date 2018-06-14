@@ -14,29 +14,34 @@ html, body {
     z-index: 10;
     width: 25%;
     height: 35%;
-    border: 2px solid black;
-}
-
-#timer {
-    position: absolute;
-    top: 0%;
-    left: 0%;
-    z-index: 10;
-    width: 25%;
-    height: 35%;
-    font-size: 60px;
-    color: white;
 }
 
 #info {
     position: absolute;
-    bottom: 0px;
-    left: 0px;
-    background-color: silver;
-    border: 2px solid black;
+    top: 0%;
+    left: 0%;
+    z-index: 10;
+    font-size: 30px;
+    color: white;
 }
 
-#info button {
+table {
+    border: 2px dashed white;
+    width: 374px;
+}
+
+table td {
+    padding: 0 8px;
+}
+
+#controls {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    background-color: black;
+}
+
+#controls button {
     margin: 4px;
     width: 24px;
     height: 24px;
@@ -62,19 +67,25 @@ html, body {
     display: block;
 }
 
-#nickAndScore>input {
-    display: block;
-    width: 15%
+#winOrLose {
+    margin-top: 5px;
+    font-size: 80px;
+    color: white;
 }
 
 #scoreBoard {
     position: absolute;
     border: solid green 2px;
-    width: 30%;
-    height: 70%;
-    margin-top: 10px;
-    padding: 0;
+    width: 45%;
+    height: 75%;
+    margin-top: 15px;
     left: -8%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+#scoreBoard>p {
+    margin: 0;
 }
 
 .picked {

@@ -77,7 +77,6 @@ io.sockets.on("connection", function (client) {
         if (clients.indexOf(client) != -1) {
             clients[clients.indexOf(client)] = null;
         }
-        //console.log("DIS: " + client.id);
     })
 
     client.on("cubeChange", function (input_data) {
@@ -88,27 +87,30 @@ io.sockets.on("connection", function (client) {
         client.broadcast.emit("cameraChange", position);
     })
 
-    client.on("zapisDoBazy", function (data) {
-        mongoClient.connect("mongodb://" + data.ip + "/RubikCube", function (err, db) {
+    client.on('cubeSolved', function (input) {
+
+        mongoClient.connect("mongodb://localhost/RubikCube", function (err, db) {
             if (err) console.log(err)
             else {
                 _db = db;
-
                 db.createCollection("Score", function (err, coll) {
-                    coll.insert({ "nick": data.nick, "yourScore": data.time }, function (err, result) {
+                    coll.insert({ "nick": input.nick, "yourScore": input.time }, function (err, result) {
+                        getColl(coll, function (data) {
+                            output = {
+                                coll: data,
+                                id: input.id
+                            }
+                            io.sockets.emit("win", output)
+                        })
                     });
-                    getColl(db, function (data) {
-                        io.sockets.emit("getcolls", data)
-                    })
                 })
             }
         })
     })
-
 })
 
-var getColl = function (db, callback) {
-    db.listCollections().toArray(function (err, colls) {
-        callback(colls)
+var getColl = function (coll, callback) {
+    coll.find({}).toArray(function (err, items) {
+        callback(items)
     })
 }
