@@ -7,6 +7,19 @@ html, body {
     background-color: black;
 }
 
+table {
+    border: 2px dashed white;
+    width: 374px;
+}
+
+table td {
+    padding: 0 8px;
+}
+
+.picked {
+    background-color: red;
+}
+
 #root {
     position: absolute;
     top: 0%;
@@ -25,15 +38,6 @@ html, body {
     color: white;
 }
 
-table {
-    border: 2px dashed white;
-    width: 374px;
-}
-
-table td {
-    padding: 0 8px;
-}
-
 #controls {
     position: absolute;
     bottom: 0px;
@@ -47,7 +51,7 @@ table td {
     height: 24px;
 }
 
-#nickDiv {
+#divWhichShowsAfterSolvingCube {
     display: block;
     background-color: black;
     opacity: 0.7;
@@ -58,7 +62,7 @@ table td {
     display: none;
 }
 
-#nickAndScore {
+#divForInputsScoreBoardAndScoreOfDuel {
     position: absolute;
     left: 42%;
     top: 4%;
@@ -67,7 +71,7 @@ table td {
     display: block;
 }
 
-#winOrLose {
+#divWhichShowsWhoWinAndWhoLose {
     margin-top: 5px;
     font-size: 80px;
     color: white;
@@ -88,6 +92,3 @@ table td {
     margin: 0;
 }
 
-.picked {
-    background-color: red;
-}

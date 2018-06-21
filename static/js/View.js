@@ -1,5 +1,7 @@
 function View(target, width, height) {
 
+    // PODSTAWOWA BUDOWA SCENY
+
     var view = this
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(
@@ -19,15 +21,8 @@ function View(target, width, height) {
         renderer.setClearColor(0x000000, 0);
     }
 
-
     renderer.setSize(width, height);
-    renderer.shadowMap.enabled = true
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     $(target).append(renderer.domElement);
-
-    var axes = new THREE.AxesHelper(4000);
-    axes.position.set(-161, -161, -161)
-    //scene.add(axes);
 
     camera.position.set(600, 600, 600);
     camera.lookAt(scene.position);
@@ -41,6 +36,8 @@ function View(target, width, height) {
         });
     }
 
+    //
+
     //LIGHTS
     for (i = -1; i < 2; i = i + 2) {
         for (j = -1; j < 2; j = j + 2) {
@@ -52,6 +49,8 @@ function View(target, width, height) {
             }
         }
     }
+
+    //
 
     //Tablice dla odpowiednich ścian kostki oraz dla odpowiednich kolorów modeli, aby każda ściana miała identyczny a zarazem różny kolor
 
@@ -90,17 +89,17 @@ function View(target, width, height) {
         blocksOfMinusZ[a] = []
     }
 
-    //DODANIE MESHY
-
-
-
+    //
 
     //
     // Oś X == i
     // Oś Y == j
     // Oś Z == k
     //
+
     var cubes = [];
+
+    // TWORZENIE SZEŚCIANÓW, Z KTÓRYCH SKŁADA SIĘ KOSTKA ORAZ UMIESZCZENIE ICH W TABLICACH 
 
     for (i = -1; i < 2; i++) {
         for (j = -1; j < 2; j++) {
@@ -117,15 +116,12 @@ function View(target, width, height) {
                 var block = new THREE.Object3D;
 
                 var cube = new THREE.Mesh(geometry, material);
-                cube.castShadow = true
-                cube.receiveShadow = true
                 block.add(cube);
                 cubes.push(cube)
 
                 block.position.set(i * 110, j * 110, k * 110)
                 block.userData = { x: i, y: j, z: k }
                 scene.add(block);
-
 
                 if (i == -1) {
                     blocksOfMinusX[j + 1][k + 1] = block
@@ -151,7 +147,7 @@ function View(target, width, height) {
 
     //
 
-    // Ładowanie 6 różnych modeli, aby miały ten sam kolor ścian. Dodatkowo tutaj dodaje do Bloków z tablicy właśnie te modele
+    // Ładowanie 6 różnych modeli, aby miały ten sam kolor ścian. Dodatkowo tutaj dodaje do małych sześcianów z tablicy dodane.
 
     var positionOfStick = 54;
     var positionOfStickY = -40
@@ -303,6 +299,7 @@ function View(target, width, height) {
         }
     })
 
+    //
 
     // ZMIENNE DLA ANIMACJI
     var container = new THREE.Object3D;
@@ -315,6 +312,8 @@ function View(target, width, height) {
         row: 1,         // (-1/0/1)
         duration: 30,   // (1-60) i więcej - czas trwania animacji w klatkach
     }
+
+    //
 
     // FUNKCJA PUBLICZNA ROZPOCZYNAJĄCA ODPOWIEDNIĄ ANIMACJĘ
     this.move = function (input_data) {
@@ -347,6 +346,10 @@ function View(target, width, height) {
 
         camera.lookAt(scene.position)
     }
+
+    //
+
+    // FUNKCJA OKREŚLAJĄCE DŁUGOŚĆ TRWANIA ANIMACJI
 
     function frame() {
         if (frame_num > 0) {
@@ -399,27 +402,34 @@ function View(target, width, height) {
             }
             scene.remove(container);
 
-            if(target=='body'){
+            // WARUNEK WYGRANEJ ROZGRYWKI, KTÓRY UKAZUJE DIVA, KTÓRY POZWALA NA WYSŁANIE TWOJEGO WYNIKU DO BAZY MONGODB.
+            // INSTNIEJE JEDNAK PROBLEM, ŻE TAKI SAM DZIAŁAJĄCY PANEL POJAWIAŁA SIĘ U OSOBY, KTÓRA PRZEGRAŁA I TO OD SYZBKOŚCI REAKCJI ZAWODNIKÓW 
+            // ZALEŻY CZYJ WYNIK POJAWI SIĘ W BAZIE DANYCH
+
                 if (data.enter) { } else {
                     if (checkWin()[0]) {
                         ui.getTimerInterval()
                         ui.active = false
-                        $("#nickDiv").css("display", "block")
-                        $("#nickSubmit").on("click", function () {
+                        $("#divWhichShowsAfterSolvingCube").css("display", "block")
+                        $("#submit").on("click", function () {
                             input = {
                                 id: net.client.id,
                                 time: $("#timer")[0].innerHTML,
-                                nick: $("#nickInput").val()
+                                nick: $("#input").val()
                             }
                             net.client.emit("cubeSolved", input)
                         })
                     }
                 }
-            }
-            
+
+            //
+
             view.animation = false;
         }
     }
+
+    //  FUNKCJA ODPOWIADAJACE ZA SPRAWDZENIE CZY KOSTKA ZOSTAŁA UŁOŻONA.
+    //  DODATKOWO ZWRACA ONA ILOSC POPRAWNIE UŁOŻONYCH ŚCIAN, LECZ TA INFORMACJA NIE JEST PRZEZ WYKORZYSTYWANA
 
     function checkWin() {
         red = true
@@ -502,8 +512,9 @@ function View(target, width, height) {
         return tab;
     }
 
+    //
 
-    //-------------- RAYCASTER
+    //-------------- RUCH KOSTKI NA MYSZCZE by MICHAŁ MADEJA
     //-------------- !!! "NIE PYTAJ MNIE, WIEM TYLE CO I TY" !!!--------------------------//
 
     var raycaster = new THREE.Raycaster();
@@ -639,6 +650,8 @@ function View(target, width, height) {
         }
         over = []
     }
+
+    //
 
     function render() {
         if (view.animation) frame()

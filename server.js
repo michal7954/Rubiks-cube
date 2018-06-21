@@ -52,7 +52,6 @@ server.listen(3000, function () {
 });
 
 var io = socketio.listen(server)
-
 var clients = [];
 
 io.sockets.on("connection", function (client) {
@@ -88,7 +87,6 @@ io.sockets.on("connection", function (client) {
     })
 
     client.on('cubeSolved', function (input) {
-
         mongoClient.connect("mongodb://localhost/RubikCube", function (err, db) {
             if (err) console.log(err)
             else {

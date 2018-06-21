@@ -9,9 +9,6 @@ function Net() {
         if (data.num == -1) {
             console.log("brak miejsc")
         }
-        else {
-            //console.log(data)
-        }
         net.playerNum = data.num
     })
 
@@ -34,15 +31,14 @@ function Net() {
     this.client.on('win', function (input) {
         ui.active = false;
         if (net.client.id == input.id) {
-            $("#winOrLose").text("Wygrana")
+            $("#divWhichShowsWhoWinAndWhoLose").text("Wygrana")
         }
         else {
-            $("#winOrLose").text("Przegrana")
+            $("#divWhichShowsWhoWinAndWhoLose").text("Przegrana")
         }
 
         $("#scoreBoard").empty()
         for (var i = 0; i < input.coll.length; i++) {
-            $("#scoreBoard").empty()
             var playerScore = $("<p>")
             playerScore[0].innerHTML = i + ". " + input.coll[i].nick + ": " + input.coll[i].yourScore
             $("#scoreBoard").append(playerScore)

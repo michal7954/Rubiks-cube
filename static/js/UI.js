@@ -24,7 +24,7 @@ function Ui() {
                 i++;
             }
 
-            //STRZAŁKI
+            // STRZAŁKI, KTÓRYMI WYKONUJE SIĘ RUCH WYBRANĄ ŚCIANĄ
 
             if ((e.key == "ArrowLeft" || e.key == "ArrowDown") && game.animation == false) {
 
@@ -44,9 +44,7 @@ function Ui() {
 
                 game.move(input_data)
 
-            }
-
-            else if ((e.key == "ArrowUp" || e.key == "ArrowRight") && game.animation == false) {
+            } else if ((e.key == "ArrowUp" || e.key == "ArrowRight") && game.animation == false) {
 
                 if (isTimerTickTock == false) {
                     timer()
@@ -66,7 +64,7 @@ function Ui() {
 
             }
 
-            // KLAWISZE FUNKCYJNE DLA STEROWANIA
+            // KLAWISZE, KTÓRYCH MOŻNA UŻYĆ DO WYBRANIA ODPOWIEDNIEJ ŚCIANY DO RUCHU
 
             else if (e.key == 'x' || e.key == 'y' || e.key == 'z' || e.key == 'q' || e.key == 'w' || e.key == 'e') {
 
@@ -95,7 +93,7 @@ function Ui() {
         }
     });
 
-    //BUTTONY
+    // PRZYCISKI OKREŚLAJĄCE, KTÓRA ŚCIANA JEST AKTUALNIE WYBRANIE (DZIAŁA TYLKO W PRZYPADKU WYBORU ŚCIANY NA KLAWISZACH)
     var axis = 'x'
     $('.axis').on('click', function () {
         $('.axis.picked').removeClass('picked')
@@ -110,7 +108,7 @@ function Ui() {
         row = $(this).val()
     })
 
-    //RAYCASTER
+    // RAYCASTER
     var mousedown = false;
     $(document)
         .mousedown(function (e) {
