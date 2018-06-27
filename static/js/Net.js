@@ -9,18 +9,7 @@ function Net() {
         if (data.num == -1) {
             console.log("brak miejsc")
         }
-        else {
-            //console.log(data)
-        }
         net.playerNum = data.num
-    })
-
-    this.client.on('cubeChange', function (input_data) {
-        preview.move(input_data);
-    })
-
-    this.client.on('cameraChange', function (position) {
-        preview.changeCamera(position);
     })
 
     this.client.on('createPreview', function () {
@@ -31,18 +20,25 @@ function Net() {
         }
     })
 
+    this.client.on('cubeChange', function (input_data) {
+        preview.move(input_data);
+    })
+
+    this.client.on('cameraChange', function (position) {
+        preview.changeCamera(position);
+    })
+
     this.client.on('win', function (input) {
         ui.active = false;
         if (net.client.id == input.id) {
-            $("#winOrLose").text("Wygrana")
+            $("#divWhichShowsWhoWinAndWhoLose").text("Wygrana")
         }
         else {
-            $("#winOrLose").text("Przegrana")
+            $("#divWhichShowsWhoWinAndWhoLose").text("Przegrana")
         }
 
         $("#scoreBoard").empty()
         for (var i = 0; i < input.coll.length; i++) {
-            $("#scoreBoard").empty()
             var playerScore = $("<p>")
             playerScore[0].innerHTML = i + ". " + input.coll[i].nick + ": " + input.coll[i].yourScore
             $("#scoreBoard").append(playerScore)
