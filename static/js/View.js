@@ -397,14 +397,20 @@ function View(target, width, height) {
                     ui.getTimerInterval()
                     ui.active = false
                     $("#divWhichShowsAfterSolvingCube").css("display", "block")
-                    $("#submit").on("click", function () {
-                        input = {
-                            id: net.client.id,
-                            time: $("#timer")[0].innerHTML,
-                            nick: $("#input").val()
-                        }
-                        net.client.emit("cubeSolved", input)
-                    })
+                    if (target == 'body') {
+                        $("#submit")
+                            .on("click", function () {
+                                input = {
+                                    id: net.client.id,
+                                    time: $("#timer")[0].innerHTML,
+                                    nick: $("#input").val()
+                                }
+                                net.client.emit("cubeSolved", input)
+                            })
+                    }
+                    else {
+                        $("#submit").attr('disabled', 'disabled');
+                    }
                 }
             }
             view.animation = false; //ZAKOŃCZENIE ANIMACJI
