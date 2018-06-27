@@ -9,6 +9,7 @@ function Ui() {
 
     $(document).keydown(function (e) {
         if (ui.active) {
+            //MIESZANIE KOSTKI POD ENTEREM
             if (e.key == "Enter" && game.animation == false) {
 
                 var input_data = {
@@ -65,7 +66,6 @@ function Ui() {
             }
 
             // KLAWISZE, KTÓRYCH MOŻNA UŻYĆ DO WYBRANIA ODPOWIEDNIEJ ŚCIANY DO RUCHU
-
             else if (e.key == 'x' || e.key == 'y' || e.key == 'z' || e.key == 'q' || e.key == 'w' || e.key == 'e') {
 
                 switch (e.key) {

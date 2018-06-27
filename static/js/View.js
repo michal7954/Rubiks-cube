@@ -1,7 +1,6 @@
 function View(target, width, height) {
 
     // PODSTAWOWA BUDOWA SCENY
-
     var view = this
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(
@@ -15,7 +14,6 @@ function View(target, width, height) {
         var renderer = new THREE.WebGLRenderer();
         renderer.setClearColor(0x000000);
     }
-
     else {
         var renderer = new THREE.WebGLRenderer({ alpha: true });
         renderer.setClearColor(0x000000, 0);
@@ -27,6 +25,7 @@ function View(target, width, height) {
     camera.position.set(600, 600, 600);
     camera.lookAt(scene.position);
 
+    //ORBIT CONTROLS
     if (target == 'body') {
         var orbitControl = new THREE.OrbitControls(camera, renderer.domElement);
         orbitControl.addEventListener('change', function () {
@@ -35,8 +34,6 @@ function View(target, width, height) {
                 net.client.emit("cameraChange", camera.position);
         });
     }
-
-    //
 
     //LIGHTS
     for (i = -1; i < 2; i = i + 2) {
@@ -50,10 +47,7 @@ function View(target, width, height) {
         }
     }
 
-    //
-
     //Tablice dla odpowiednich ścian kostki oraz dla odpowiednich kolorów modeli, aby każda ściana miała identyczny a zarazem różny kolor
-
     var redModels = []
     var blocksOfX = []
     for (a = 0; a < 3; a++) {
@@ -90,16 +84,14 @@ function View(target, width, height) {
     }
 
     //
-
-    //
     // Oś X == i
     // Oś Y == j
     // Oś Z == k
     //
 
-    var cubes = [];
 
     // TWORZENIE SZEŚCIANÓW, Z KTÓRYCH SKŁADA SIĘ KOSTKA ORAZ UMIESZCZENIE ICH W TABLICACH 
+    var cubes = [];
 
     for (i = -1; i < 2; i++) {
         for (j = -1; j < 2; j++) {
@@ -145,10 +137,7 @@ function View(target, width, height) {
         }
     }
 
-    //
-
     // Ładowanie 6 różnych modeli, aby miały ten sam kolor ścian. Dodatkowo tutaj dodaje do małych sześcianów z tablicy dodane.
-
     var positionOfStick = 54;
     var positionOfStickY = -40
     var scaleOfStick = 8;
@@ -299,23 +288,21 @@ function View(target, width, height) {
         }
     })
 
-    //
 
     // ZMIENNE DLA ANIMACJI
-    var container = new THREE.Object3D;
-    var frame_num = 0;
-    this.animation = false;
+    var container = new THREE.Object3D; //GŁÓWNY ROTOWANY KONTENER
+    var frame_num = 0; //NR KLATKI W POJEDYNCZEJ ANIMACJI
+    this.animation = false; //CZY ANIMACJA NADAL TRWA
 
     var data = {
-        direction: 1,   // (0/1)
-        axis: 'x',      // (x/y/z)
-        row: 1,         // (-1/0/1)
+        direction: 1,   // (0/1) KIERUNEK OBROTU
+        axis: 'x',      // (x/y/z) OŚ OBROTU
+        row: 1,         // (-1/0/1) RZĄD
         duration: 30,   // (1-60) i więcej - czas trwania animacji w klatkach
     }
 
-    //
 
-    // FUNKCJA PUBLICZNA ROZPOCZYNAJĄCA ODPOWIEDNIĄ ANIMACJĘ
+    // FUNKCJA PUBLICZNA ROZPOCZYNAJĄCA ODPOWIEDNIĄ ANIMACJĘ W ZALEŻNOŚCI OD INPUT_DATA
     this.move = function (input_data) {
 
         if (net.playerNum != -1 && target == 'body')
@@ -329,7 +316,6 @@ function View(target, width, height) {
 
         // DYNAMICZNE PUSHOWANIE RZĘDU DO KONTENERA
         for (i = 0; i < scene.children.length; i++) {
-
             //jeżeli pozycja mesha zgadza się z dokładnością +/- 1
             if (Math.abs(scene.children[i].position[data.axis] - data.row * 110) <= 1) {
                 container.add(scene.children[i]);
@@ -347,10 +333,8 @@ function View(target, width, height) {
         camera.lookAt(scene.position)
     }
 
-    //
 
-    // FUNKCJA OKREŚLAJĄCE DŁUGOŚĆ TRWANIA ANIMACJI
-
+    // FUNKCJA ODPOWIADAJĄCA ZA POJEDYNCZĄ KLATKĘ ZWIĄZANĄ Z OBROTEM KONTENERA
     function frame() {
         if (frame_num > 0) {
 
@@ -375,10 +359,12 @@ function View(target, width, height) {
             frame_num--;
 
         }
+
         //chwila spoczynku między animacjami
         else if (frame_num <= 0 && frame_num > -30) {
             frame_num--;
         }
+
         else {
             // CZYSZCZENIE KONTENERA I AKTUALIZOWANIE POZYCJI ORAZ ROTACJI BLOKÓW
             for (i = 0; i < container.children.length; i++) {
@@ -406,25 +392,22 @@ function View(target, width, height) {
             // INSTNIEJE JEDNAK PROBLEM, ŻE TAKI SAM DZIAŁAJĄCY PANEL POJAWIAŁA SIĘ U OSOBY, KTÓRA PRZEGRAŁA I TO OD SYZBKOŚCI REAKCJI ZAWODNIKÓW 
             // ZALEŻY CZYJ WYNIK POJAWI SIĘ W BAZIE DANYCH
 
-                if (data.enter) { } else {
-                    if (checkWin()[0]) {
-                        ui.getTimerInterval()
-                        ui.active = false
-                        $("#divWhichShowsAfterSolvingCube").css("display", "block")
-                        $("#submit").on("click", function () {
-                            input = {
-                                id: net.client.id,
-                                time: $("#timer")[0].innerHTML,
-                                nick: $("#input").val()
-                            }
-                            net.client.emit("cubeSolved", input)
-                        })
-                    }
+            if (!data.enter) {
+                if (checkWin()[0]) {
+                    ui.getTimerInterval()
+                    ui.active = false
+                    $("#divWhichShowsAfterSolvingCube").css("display", "block")
+                    $("#submit").on("click", function () {
+                        input = {
+                            id: net.client.id,
+                            time: $("#timer")[0].innerHTML,
+                            nick: $("#input").val()
+                        }
+                        net.client.emit("cubeSolved", input)
+                    })
                 }
-
-            //
-
-            view.animation = false;
+            }
+            view.animation = false; //ZAKOŃCZENIE ANIMACJI
         }
     }
 
@@ -512,17 +495,14 @@ function View(target, width, height) {
         return tab;
     }
 
-    //
-
-    //-------------- RUCH KOSTKI NA MYSZCZE by MICHAŁ MADEJA
-    //-------------- !!! "NIE PYTAJ MNIE, WIEM TYLE CO I TY" !!!--------------------------//
+    //-------------- RUCH KOSTKI NA MYSZCE by MICHAŁ MADEJA
+    //--------------  "NIE PYTAJ MNIE, WIEM TYLE CO I TY" --------------------------//
 
     var raycaster = new THREE.Raycaster();
     var mouseVector = new THREE.Vector2();
     var over = [];
 
     this.casting = function (e) {
-
         mouseVector.x = (e.clientX / $(window).width()) * 2 - 1;
         mouseVector.y = -(e.clientY / $(window).height()) * 2 + 1;
 
@@ -651,8 +631,7 @@ function View(target, width, height) {
         over = []
     }
 
-    //
-
+    //RENDERER
     function render() {
         if (view.animation) frame()
         renderer.render(scene, camera);

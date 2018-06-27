@@ -12,20 +12,20 @@ function Net() {
         net.playerNum = data.num
     })
 
-    this.client.on('cubeChange', function (input_data) {
-        preview.move(input_data);
-    })
-
-    this.client.on('cameraChange', function (position) {
-        preview.changeCamera(position);
-    })
-
     this.client.on('createPreview', function () {
         if (!preview) {
             //w tym miejscu opcjonalne wywołanie funkcji mieszającej kostkę
             ui.active = true;
             preview = new View("#root", $("#root")[0].clientWidth, $("#root")[0].clientHeight);
         }
+    })
+
+    this.client.on('cubeChange', function (input_data) {
+        preview.move(input_data);
+    })
+
+    this.client.on('cameraChange', function (position) {
+        preview.changeCamera(position);
     })
 
     this.client.on('win', function (input) {
