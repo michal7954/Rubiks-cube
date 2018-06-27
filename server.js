@@ -100,7 +100,7 @@ io.sockets.on("connection", function (client) {
                             }
                             io.sockets.emit("win", output)
                         })
-                    });
+                    })
                 })
             }
         })

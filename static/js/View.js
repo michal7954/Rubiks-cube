@@ -389,8 +389,6 @@ function View(target, width, height) {
             scene.remove(container);
 
             // WARUNEK WYGRANEJ ROZGRYWKI, KTÓRY UKAZUJE DIVA, KTÓRY POZWALA NA WYSŁANIE TWOJEGO WYNIKU DO BAZY MONGODB.
-            // INSTNIEJE JEDNAK PROBLEM, ŻE TAKI SAM DZIAŁAJĄCY PANEL POJAWIAŁA SIĘ U OSOBY, KTÓRA PRZEGRAŁA I TO OD SYZBKOŚCI REAKCJI ZAWODNIKÓW 
-            // ZALEŻY CZYJ WYNIK POJAWI SIĘ W BAZIE DANYCH
 
             if (!data.enter) {
                 if (checkWin()[0]) {
